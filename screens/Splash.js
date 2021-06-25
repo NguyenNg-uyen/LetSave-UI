@@ -6,48 +6,92 @@ import {
    Image,
    StatusBar,
    Animated,
+   Dimensions,
 } from "react-native";
 import { GREEN, MEDIUM_PINK } from "../assets/color";
 import logo from "../assets/images/logo.png";
 import money from "../assets/images/money.png";
 import * as Font from "expo-font";
 import AppLoading from "expo-app-loading";
-
+// Set up letter fonts
 const getFonts = () => {
    return Font.loadAsync({
       Frijole: require("../assets/fonts/Frijole-Regular.ttf"),
       FrederickatheGreat: require("../assets/fonts/FrederickatheGreat-Regular.ttf"),
    });
 };
-const logoOpacity = new Animated.Value(0);
+
 export default function Splash() {
+   var { height, width } = Dimensions.get("window");
+   // Animation
+   const logoOpacity = new Animated.Value(0); //Opacity of logo
+   const sloganMaginTop = new Animated.Value(1000);
+   const moneyOpacity = new Animated.Value(0);
    Animated.sequence([
-      Animated.timing(this.state.logoOpacity, {
+      // Logo Animation
+      Animated.timing(logoOpacity, {
          toValue: 1,
-         duration: 2000,
+         duration: 1500,
+         useNativeDriver: true,
       }),
-   ]);
+      // Text Animation
+      Animated.timing(sloganMaginTop, {
+         toValue: 0,
+         duration: 2000,
+         useNativeDriver: false,
+      }),
+      // Image Animation
+      Animated.timing(moneyOpacity, {
+         toValue: 1,
+         duration: 1500,
+         useNativeDriver: true,
+      }),
+   ]).start(() => {});
    const [fontsLoaded, setFontsLoaded] = useState(false);
+   // If fonts are loaded successfully
    if (fontsLoaded)
       return (
          <View style={styles.container}>
             <StatusBar />
+            {/* Logo Position*/}
             <Animated.Image
                style={{ ...styles.logo, opacity: logoOpacity }}
                source={logo}
             />
-            <Text style={styles.slogan}>Litte saves</Text>
-            <Text style={{ fontFamily: "Frijole", color: GREEN, fontSize: 25 }}>
+            {/* Slogan position */}
+            <Animated.Text
+               style={{ ...styles.slogan, marginTop: sloganMaginTop }}
+            >
+               Litte saves
+            </Animated.Text>
+            <Animated.Text
+               style={{
+                  fontFamily: "Frijole",
+                  color: GREEN,
+                  fontSize: 25,
+                  marginTop: sloganMaginTop,
+               }}
+            >
                FOR
-            </Text>
-            <Text style={styles.slogan}>huge result</Text>
-            <Image style={styles.money} source={money} />
-            <View style={styles.circle1}></View>
-            <View style={styles.circle2}></View>
-            <View style={styles.circle3}></View>
-            <View style={styles.circle4}></View>
+            </Animated.Text>
+            <Animated.Text
+               style={{ ...styles.slogan, marginTop: sloganMaginTop }}
+            >
+               huge result
+            </Animated.Text>
+            {/* Bottom image position */}
+            <Animated.Image
+               style={{ ...styles.money, opacity: moneyOpacity }}
+               source={money}
+            />
+            {/* Decorative Circle */}
+            <View style={{ ...styles.circle, left: -100, top: -30 }}></View>
+            <View style={{ ...styles.circle, right: -130, top: 200 }}></View>
+            <View style={{ ...styles.circle, left: -100, bottom: -100 }}></View>
+            <View style={{ ...styles.circle, right: -100, bottom: -50 }}></View>
          </View>
       );
+   // In case fonts are not loaded successfully
    else {
       return (
          <AppLoading
@@ -59,6 +103,7 @@ export default function Splash() {
    }
 }
 
+// Style
 const styles = StyleSheet.create({
    container: {
       flex: 1,
@@ -80,44 +125,16 @@ const styles = StyleSheet.create({
       width: 200,
       height: 200,
    },
-   circle1: {
+   circle: {
       backgroundColor: "#ffffff",
       position: "absolute",
       width: 200,
       height: 200,
       borderRadius: 100,
-      left: -100,
-      top: -30,
-   },
-   circle2: {
-      backgroundColor: "#ffffff",
-      position: "absolute",
-      width: 200,
-      height: 200,
-      borderRadius: 100,
-      right: -120,
-      top: 200,
-   },
-   circle3: {
-      backgroundColor: "#ffffff",
-      position: "absolute",
-      width: 200,
-      height: 200,
-      borderRadius: 100,
-      left: -100,
-      bottom: -100,
-   },
-   circle4: {
-      backgroundColor: "#ffffff",
-      position: "absolute",
-      width: 200,
-      height: 200,
-      borderRadius: 100,
-      right: -100,
-      bottom: -50,
    },
    money: {
-      marginTop: 60,
+      position: "absolute",
+      bottom: 0,
       width: 220,
       height: 220,
    },
