@@ -22,7 +22,6 @@ const getFonts = () => {
 };
 
 export default function Splash() {
-   var { height, width } = Dimensions.get("window");
    // Animation
    const logoOpacity = new Animated.Value(0); //Opacity of logo
    const sloganMaginTop = new Animated.Value(1000);
