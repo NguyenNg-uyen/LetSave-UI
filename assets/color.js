@@ -5,3 +5,6 @@ export const GREEN = "#008E0E";
 export const WHITE = "#FFFFFF";
 export const GRAY = "#A4A2A2";
 export const BLACK = "#000000";
+export const FACEBOOK = "#4C86D0";
+export const TWITTER = "#0094FF";
+export const GMAIL = "#FF5454";

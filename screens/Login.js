@@ -1,12 +1,5 @@
 import React, { useState } from "react";
-import {
-   StyleSheet,
-   Text,
-   View,
-   Image,
-   StatusBar,
-   Dimensions,
-} from "react-native";
+import { StyleSheet, View, Image, StatusBar, Dimensions } from "react-native";
 import { Card } from "react-native-shadow-cards";
 import { WHITE, MEDIUM_PINK, PINK, GRAY } from "../assets/color";
 import logo from "../assets/images/logo.png";
@@ -86,7 +79,7 @@ const styles = StyleSheet.create({
    },
    box: {
       width: 0.81 * width,
-      height: 0.6 * height,
+      height: 0.62 * height,
       backgroundColor: WHITE,
       borderRadius: 30,
       overflow: "hidden",

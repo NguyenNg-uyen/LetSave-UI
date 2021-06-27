@@ -8,9 +8,17 @@ import {
    ScrollView,
    KeyboardAvoidingView,
 } from "react-native";
-import { WHITE, GRAY, PINK } from "../../assets/color";
+import {
+   WHITE,
+   GRAY,
+   PINK,
+   FACEBOOK,
+   GMAIL,
+   TWITTER,
+} from "../../assets/color";
 import * as Font from "expo-font";
 import Icon from "react-native-vector-icons/FontAwesome";
+import FontAwesome from "react-native-vector-icons/FontAwesome";
 import AppLoading from "expo-app-loading";
 // Set up letter fonts
 const getFonts = () => {
@@ -21,8 +29,26 @@ const getFonts = () => {
 export default function Signin() {
    const [fontsLoaded, setFontsLoaded] = useState(false);
    const [enableshift, setenableShift] = useState(false);
+   const Divider = (props) => {
+      return (
+         <View {...props}>
+            <View style={styles.line}></View>
+            <Text style={styles.textOR}>or sign in with</Text>
+            <View style={styles.line}></View>
+         </View>
+      );
+   };
    // If fonts are loaded successfully
    if (fontsLoaded) {
+      const Divider = (props) => {
+         return (
+            <View {...props}>
+               <View style={styles.line}></View>
+               <Text style={styles.textOR}>or sign in with</Text>
+               <View style={styles.line}></View>
+            </View>
+         );
+      };
       return (
          <KeyboardAvoidingView
             style={{ flex: 1 }}
@@ -51,6 +77,56 @@ export default function Signin() {
                         <Icon name="chevron-right" size={20} color="white" />
                      </TouchableOpacity>
                   </View>
+                  <Divider style={styles.divider}></Divider>
+                  <View style={{ display: "flex", flexDirection: "row" }}>
+                     <FontAwesome.Button
+                        name="facebook"
+                        backgroundColor={FACEBOOK}
+                        style={styles.socialBtn}
+                     >
+                        <Text style={styles.socialTitle}>Facebook</Text>
+                     </FontAwesome.Button>
+                     <View style={{ width: 20 }}></View>
+                     <FontAwesome.Button
+                        name="twitter"
+                        backgroundColor={TWITTER}
+                        style={{ ...styles.socialBtn, paddingLeft: 10 }}
+                     >
+                        <Text style={styles.socialTitle}>Twitter</Text>
+                     </FontAwesome.Button>
+                  </View>
+                  <View style={{ height: 13 }}></View>
+                  <FontAwesome.Button
+                     name="google"
+                     backgroundColor={GMAIL}
+                     style={{ ...styles.socialBtn, paddingLeft: 20 }}
+                  >
+                     <Text style={{ ...styles.socialTitle, marginLeft: 0 }}>
+                        Gmail
+                     </Text>
+                  </FontAwesome.Button>
+                  <Text
+                     style={{
+                        ...styles.textForgotAndContinue,
+                        fontSize: 15,
+                        textDecorationLine: "underline",
+                        textDecorationStyle: "solid",
+                        textDecorationColor: "#6C6C6C",
+                        marginTop: 10,
+                        marginBottom: 5,
+                     }}
+                  >
+                     Forgot password
+                  </Text>
+                  <Text
+                     style={{
+                        ...styles.textForgotAndContinue,
+                        fontSize: 20,
+                        marginHorizontal: 10,
+                     }}
+                  >
+                     Continue as guesst
+                  </Text>
                </View>
             </ScrollView>
          </KeyboardAvoidingView>
@@ -117,5 +193,44 @@ const styles = StyleSheet.create({
       justifyContent: "center",
       marginLeft: 12,
       marginTop: 17,
+   },
+   line: {
+      height: 1,
+      flex: 1,
+      backgroundColor: "#6C6C6C",
+      marginHorizontal: 5,
+   },
+   textOR: {
+      alignSelf: "stretch",
+      textAlign: "center",
+      color: "#6C6C6C",
+   },
+   divider: {
+      display: "flex",
+      flexDirection: "row",
+      height: 21,
+      width: 120,
+      justifyContent: "center",
+      alignItems: "center",
+      marginTop: 15,
+      marginBottom: 10,
+   },
+   fbAndGoogle: {
+      display: "flex",
+      flexDirection: "row",
+      justifyContent: "space-between",
+   },
+   socialBtn: {
+      width: 120,
+      height: 31,
+      alignItems: "center",
+   },
+   socialTitle: {
+      fontSize: 18,
+      color: WHITE,
+   },
+   textForgotAndContinue: {
+      fontFamily: "AveriaSansLibre",
+      color: "#6C6C6C",
    },
 });

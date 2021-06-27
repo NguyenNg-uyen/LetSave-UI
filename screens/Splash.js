@@ -21,7 +21,7 @@ const getFonts = () => {
    });
 };
 
-export default function Splash() {
+export default function Splash({ navigation }) {
    // Animation
    const logoOpacity = new Animated.Value(0); //Opacity of logo
    const sloganMaginTop = new Animated.Value(1000);
@@ -45,7 +45,9 @@ export default function Splash() {
          duration: 1500,
          useNativeDriver: true,
       }),
-   ]).start(() => {});
+   ]).start(() => {
+      navigation.navigate("Login");
+   });
    const [fontsLoaded, setFontsLoaded] = useState(false);
    // If fonts are loaded successfully
    if (fontsLoaded)
