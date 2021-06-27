@@ -10,8 +10,8 @@ import {
 } from "react-native";
 import { WHITE, GRAY, PINK } from "../../assets/color";
 import * as Font from "expo-font";
+import CheckBox from "react-native-check-box";
 import AppLoading from "expo-app-loading";
-import { CheckBox } from "react-native-elements";
 // Set up letter fonts
 const getFonts = () => {
    return Font.loadAsync({
@@ -20,16 +20,11 @@ const getFonts = () => {
 };
 export default function Signin() {
    const [fontsLoaded, setFontsLoaded] = useState(false);
-   const [enableshift, setenableShift] = useState(false);
-   const [isSelected, setSelection] = useState(false);
+   const [isSelected, setSelection] = useState(true);
    // If fonts are loaded successfully
    if (fontsLoaded) {
       return (
-         <KeyboardAvoidingView
-            style={{ flex: 1 }}
-            behavior="padding"
-            enable={enableshift}
-         >
+         <KeyboardAvoidingView style={{ flex: 1 }} behavior="padding">
             <ScrollView style={styles.container}>
                <View style={styles.box}>
                   <View style={styles.emailView}>
@@ -44,7 +39,6 @@ export default function Signin() {
                      <TextInput
                         style={styles.textInput}
                         placeholder="**************"
-                        onFocus={() => setenableShift(true)}
                      />
                   </View>
                   <View style={styles.passView}>
@@ -52,17 +46,24 @@ export default function Signin() {
                      <TextInput
                         style={styles.textInput}
                         placeholder="**************"
-                        onFocus={() => setenableShift(true)}
                      />
                   </View>
                   <View style={styles.viewPrivacy}>
                      <CheckBox
-                        checked={true}
-                        onValueChange={setSelection}
-                        checkedColor="red"
-                        title="Click here"
+                        isChecked={isSelected}
+                        checkedCheckBoxColor={PINK}
+                        onClick={() => {
+                           setSelection(!isSelected);
+                        }}
+                        checkBoxColor={PINK}
                      />
+                     <Text style={styles.textPrivacy}>
+                        I agree with privacy and policy
+                     </Text>
                   </View>
+                  <TouchableOpacity style={styles.btnSignup}>
+                     <Text style={styles.textSignUp}>Sign Up</Text>
+                  </TouchableOpacity>
                </View>
             </ScrollView>
          </KeyboardAvoidingView>
@@ -94,7 +95,7 @@ const styles = StyleSheet.create({
       justifyContent: "flex-start",
    },
    emailView: {
-      marginTop: 60,
+      marginTop: 12,
    },
    email: {
       fontSize: 20,
@@ -116,7 +117,31 @@ const styles = StyleSheet.create({
    viewPrivacy: {
       display: "flex",
       flexDirection: "row",
-      justifyContent: "center",
+      justifyContent: "flex-start",
       alignItems: "center",
+      marginTop: 20,
+   },
+   textPrivacy: {
+      fontFamily: "AveriaSansLibre",
+      fontSize: 17,
+      marginLeft: 7,
+      textDecorationLine: "underline",
+      textDecorationStyle: "solid",
+      textDecorationColor: "#6C6C6C",
+      color: "black",
+   },
+   btnSignup: {
+      width: 250,
+      height: 54,
+      marginVertical: 20,
+      backgroundColor: PINK,
+      alignItems: "center",
+      justifyContent: "center",
+      borderRadius: 15,
+   },
+   textSignUp: {
+      fontFamily: "AveriaSansLibre",
+      fontSize: 30,
+      color: WHITE,
    },
 });
