@@ -20,7 +20,7 @@ const getFonts = () => {
 };
 export default function Signin() {
    const [fontsLoaded, setFontsLoaded] = useState(false);
-   const [isSelected, setSelection] = useState(true);
+   const [isSelected, setSelection] = useState(false);
    // If fonts are loaded successfully
    if (fontsLoaded) {
       return (
@@ -61,7 +61,14 @@ export default function Signin() {
                         I agree with privacy and policy
                      </Text>
                   </View>
-                  <TouchableOpacity style={styles.btnSignup}>
+                  <TouchableOpacity
+                     style={
+                        isSelected
+                           ? styles.btnSignup
+                           : { ...styles.btnSignup, backgroundColor: GRAY }
+                     }
+                     disabled={!isSelected}
+                  >
                      <Text style={styles.textSignUp}>Sign Up</Text>
                   </TouchableOpacity>
                </View>
@@ -95,7 +102,7 @@ const styles = StyleSheet.create({
       justifyContent: "flex-start",
    },
    emailView: {
-      marginTop: 12,
+      marginTop: 15,
    },
    email: {
       fontSize: 20,

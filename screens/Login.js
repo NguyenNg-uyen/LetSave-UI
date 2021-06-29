@@ -1,5 +1,14 @@
 import React, { useState } from "react";
-import { StyleSheet, View, Image, StatusBar, Dimensions } from "react-native";
+import {
+   StyleSheet,
+   View,
+   Image,
+   StatusBar,
+   Dimensions,
+   KeyboardAvoidingView,
+   ScrollView,
+   BackHandler,
+} from "react-native";
 import { Card } from "react-native-shadow-cards";
 import { WHITE, MEDIUM_PINK, PINK, GRAY } from "../assets/color";
 import logo from "../assets/images/logo.png";
@@ -17,36 +26,46 @@ const getFonts = () => {
 };
 var { height, width } = Dimensions.get("window");
 const Tab = createMaterialTopTabNavigator();
-export default function Login() {
+export default function Login({ navigation }) {
    const [fontsLoaded, setFontsLoaded] = useState(false);
    // If fonts are loaded successfully
+   const disableBackButton = () => {
+      BackHandler.exitApp();
+      return true;
+   };
+   BackHandler.addEventListener("hardwareBackPress", disableBackButton);
    if (fontsLoaded)
       return (
-         <View style={styles.container}>
+         <KeyboardAvoidingView style={styles.container}>
             <StatusBar />
             <Image style={styles.logo} source={logo} />
-            <Card style={styles.box}>
-               <NavigationContainer>
-                  <Tab.Navigator
-                     tabBarOptions={{
-                        labelStyle: {
-                           fontSize: 20,
-                           fontFamily: "AveriaSansLibre",
-                        },
-                        activeTintColor: PINK,
-                        inactiveTintColor: GRAY,
-                        indicatorStyle: {
-                           backgroundColor: PINK,
-                        },
-                     }}
-                  >
-                     <Tab.Screen name="Sign in" component={Signin} />
-                     <Tab.Screen name="Sign up" component={Signup} />
-                  </Tab.Navigator>
-               </NavigationContainer>
-            </Card>
+            <ScrollView>
+               <Card style={styles.box}>
+                  <NavigationContainer>
+                     <Tab.Navigator
+                        tabBarOptions={{
+                           labelStyle: {
+                              fontSize: 20,
+                              fontFamily: "AveriaSansLibre",
+                           },
+                           activeTintColor: PINK,
+                           inactiveTintColor: GRAY,
+                           indicatorStyle: {
+                              backgroundColor: PINK,
+                           },
+                        }}
+                     >
+                        <Tab.Screen
+                           name="Sign in"
+                           children={() => <Signin navigation={navigation} />}
+                        />
+                        <Tab.Screen name="Sign up" component={Signup} />
+                     </Tab.Navigator>
+                  </NavigationContainer>
+               </Card>
+            </ScrollView>
             <View style={{ ...styles.circle, right: -130, top: -100 }}></View>
-         </View>
+         </KeyboardAvoidingView>
       );
    // In case fonts are not loaded successfully
    else {

@@ -26,9 +26,8 @@ const getFonts = () => {
       AveriaSansLibre: require("../../assets/fonts/AveriaSansLibre-Regular.ttf"),
    });
 };
-export default function Signin() {
+export default function Signin(props) {
    const [fontsLoaded, setFontsLoaded] = useState(false);
-   const [enableshift, setenableShift] = useState(false);
    const Divider = (props) => {
       return (
          <View {...props}>
@@ -38,6 +37,9 @@ export default function Signin() {
          </View>
       );
    };
+   const [mail, setMail] = useState("");
+   const [pass, setPass] = useState("");
+
    // If fonts are loaded successfully
    if (fontsLoaded) {
       const Divider = (props) => {
@@ -51,9 +53,8 @@ export default function Signin() {
       };
       return (
          <KeyboardAvoidingView
+            behavior={Platform.OS === "ios" ? "padding" : "height"}
             style={{ flex: 1 }}
-            behavior="padding"
-            enable={enableshift}
          >
             <ScrollView style={styles.container}>
                <View style={styles.box}>
@@ -61,7 +62,9 @@ export default function Signin() {
                      <Text style={styles.email}>Email</Text>
                      <TextInput
                         style={styles.textInput}
+                        keyboardType="email-address"
                         placeholder="name@domain.com"
+                        onChangeText={(val) => setMail(val)}
                      />
                   </View>
                   <View style={styles.passView}>
@@ -70,10 +73,21 @@ export default function Signin() {
                         <TextInput
                            style={{ ...styles.textInput, width: 180 }}
                            placeholder="**************"
-                           onFocus={() => setenableShift(true)}
+                           secureTextEntry={true}
+                           onChangeText={(val) => setPass(val)}
                         />
                      </View>
-                     <TouchableOpacity style={styles.btnLogin}>
+                     <TouchableOpacity
+                        style={
+                           mail == "" || pass == ""
+                              ? { ...styles.btnLogin, backgroundColor: GRAY }
+                              : styles.btnLogin
+                        }
+                        onPress={() => {
+                           props.navigation.navigate("Home");
+                        }}
+                        disabled={mail == "" || pass == ""}
+                     >
                         <Icon name="chevron-right" size={20} color="white" />
                      </TouchableOpacity>
                   </View>
@@ -122,7 +136,7 @@ export default function Signin() {
                      style={{
                         ...styles.textForgotAndContinue,
                         fontSize: 20,
-                        marginHorizontal: 10,
+                        marginVertical: 5,
                      }}
                   >
                      Continue as guesst
@@ -158,7 +172,7 @@ const styles = StyleSheet.create({
       justifyContent: "flex-start",
    },
    emailView: {
-      marginTop: 60,
+      marginTop: 50,
    },
    email: {
       fontSize: 20,
