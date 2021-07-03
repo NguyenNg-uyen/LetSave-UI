@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import axios from "axios";
 import {
    StyleSheet,
    Text,
@@ -7,11 +8,13 @@ import {
    TouchableOpacity,
    ScrollView,
    KeyboardAvoidingView,
+   Alert,
 } from "react-native";
 import { WHITE, GRAY, PINK } from "../../assets/color";
 import * as Font from "expo-font";
 import CheckBox from "react-native-check-box";
 import AppLoading from "expo-app-loading";
+import apiLib from "../../assets/ApiStore";
 // Set up letter fonts
 const getFonts = () => {
    return Font.loadAsync({
@@ -21,8 +24,28 @@ const getFonts = () => {
 export default function Signin() {
    const [fontsLoaded, setFontsLoaded] = useState(false);
    const [isSelected, setSelection] = useState(false);
+   const [mail, setMail] = useState("");
+   const [pass, setPass] = useState("");
    // If fonts are loaded successfully
    if (fontsLoaded) {
+      {
+         /*--------------------- Call API function ---------------------*/
+      }
+      const callApi = () => {
+         axios({
+            method: "post",
+            enctype: "application/json",
+            url: apiLib.register,
+            data: {
+               username: mail,
+               password: pass,
+            },
+         })
+            .then((res) => Alert.alert("Sign up sucessfully"))
+            .catch((error) => {
+               console.error(JSON.stringify(error));
+            });
+      };
       return (
          <KeyboardAvoidingView style={{ flex: 1 }} behavior="padding">
             <ScrollView style={styles.container}>
@@ -32,6 +55,7 @@ export default function Signin() {
                      <TextInput
                         style={styles.textInput}
                         placeholder="name@domain.com"
+                        onChangeText={(val) => setMail(val)}
                      />
                   </View>
                   <View style={styles.passView}>
@@ -39,6 +63,7 @@ export default function Signin() {
                      <TextInput
                         style={styles.textInput}
                         placeholder="**************"
+                        onChangeText={(val) => setPass(val)}
                      />
                   </View>
                   <View style={styles.passView}>
@@ -67,6 +92,9 @@ export default function Signin() {
                            ? styles.btnSignup
                            : { ...styles.btnSignup, backgroundColor: GRAY }
                      }
+                     onPress={() => {
+                        callApi();
+                     }}
                      disabled={!isSelected}
                   >
                      <Text style={styles.textSignUp}>Sign Up</Text>

@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import axios from "axios";
 import {
    StyleSheet,
    Text,
@@ -7,6 +8,7 @@ import {
    TouchableOpacity,
    ScrollView,
    KeyboardAvoidingView,
+   Alert,
 } from "react-native";
 import {
    WHITE,
@@ -20,6 +22,7 @@ import * as Font from "expo-font";
 import Icon from "react-native-vector-icons/FontAwesome";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import AppLoading from "expo-app-loading";
+import apiLib from "../../assets/ApiStore";
 // Set up letter fonts
 const getFonts = () => {
    return Font.loadAsync({
@@ -28,20 +31,12 @@ const getFonts = () => {
 };
 export default function Signin(props) {
    const [fontsLoaded, setFontsLoaded] = useState(false);
-   const Divider = (props) => {
-      return (
-         <View {...props}>
-            <View style={styles.line}></View>
-            <Text style={styles.textOR}>or sign in with</Text>
-            <View style={styles.line}></View>
-         </View>
-      );
-   };
    const [mail, setMail] = useState("");
    const [pass, setPass] = useState("");
 
    // If fonts are loaded successfully
    if (fontsLoaded) {
+      // Divide social and login
       const Divider = (props) => {
          return (
             <View {...props}>
@@ -51,6 +46,24 @@ export default function Signin(props) {
             </View>
          );
       };
+      {
+         /*--------------------- Call API function ---------------------*/
+      }
+      const callApi = () => {
+         axios({
+            method: "post",
+            enctype: "application/x-www-form-urlencoded",
+            url: apiLib.login,
+            data: {
+               username: mail,
+               password: pass,
+            },
+         })
+            .then((res) => props.navigation.navigate("Home"))
+            .catch((error) => {
+               console.error(JSON.stringify(error));
+            });
+      };
       return (
          <KeyboardAvoidingView
             behavior={Platform.OS === "ios" ? "padding" : "height"}
@@ -58,6 +71,7 @@ export default function Signin(props) {
          >
             <ScrollView style={styles.container}>
                <View style={styles.box}>
+                  {/*--------------------- Email input and label ---------------------*/}
                   <View style={styles.emailView}>
                      <Text style={styles.email}>Email</Text>
                      <TextInput
@@ -67,6 +81,7 @@ export default function Signin(props) {
                         onChangeText={(val) => setMail(val)}
                      />
                   </View>
+                  {/*--------------------- Password input and label --------------------- */}
                   <View style={styles.passView}>
                      <View style={styles.passAndButton}>
                         <Text style={styles.email}>Password</Text>
@@ -77,6 +92,7 @@ export default function Signin(props) {
                            onChangeText={(val) => setPass(val)}
                         />
                      </View>
+                     {/*------------ Login button ---------------*/}
                      <TouchableOpacity
                         style={
                            mail == "" || pass == ""
@@ -84,7 +100,7 @@ export default function Signin(props) {
                               : styles.btnLogin
                         }
                         onPress={() => {
-                           props.navigation.navigate("Home");
+                           callApi();
                         }}
                         disabled={mail == "" || pass == ""}
                      >
@@ -92,7 +108,9 @@ export default function Signin(props) {
                      </TouchableOpacity>
                   </View>
                   <Divider style={styles.divider}></Divider>
+                  {/*--------------------- Social login methods ---------------------*/}
                   <View style={{ display: "flex", flexDirection: "row" }}>
+                     {/* --------------------- Facebook --------------------- */}
                      <FontAwesome.Button
                         name="facebook"
                         backgroundColor={FACEBOOK}
@@ -101,6 +119,7 @@ export default function Signin(props) {
                         <Text style={styles.socialTitle}>Facebook</Text>
                      </FontAwesome.Button>
                      <View style={{ width: 20 }}></View>
+                     {/* --------------------- Twitter --------------------- */}
                      <FontAwesome.Button
                         name="twitter"
                         backgroundColor={TWITTER}
@@ -110,6 +129,7 @@ export default function Signin(props) {
                      </FontAwesome.Button>
                   </View>
                   <View style={{ height: 13 }}></View>
+                  {/* --------------------- Google --------------------- */}
                   <FontAwesome.Button
                      name="google"
                      backgroundColor={GMAIL}
@@ -119,6 +139,7 @@ export default function Signin(props) {
                         Gmail
                      </Text>
                   </FontAwesome.Button>
+                  {/* Forgot password and continue as guesst */}
                   <Text
                      style={{
                         ...styles.textForgotAndContinue,
