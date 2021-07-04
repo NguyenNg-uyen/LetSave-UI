@@ -31,8 +31,8 @@ export default function Signin() {
       {
          /*--------------------- Call API function ---------------------*/
       }
-      const callApi = () => {
-         axios({
+      const callApi = async () => {
+         await axios({
             method: "post",
             enctype: "application/json",
             url: apiLib.register,
@@ -41,7 +41,9 @@ export default function Signin() {
                password: pass,
             },
          })
-            .then((res) => Alert.alert("Sign up sucessfully"))
+            .then((res) => {
+               if (res.status === 200) Alert.alert("Sign up sucessfully");
+            })
             .catch((error) => {
                console.error(JSON.stringify(error));
             });
@@ -64,6 +66,7 @@ export default function Signin() {
                         style={styles.textInput}
                         placeholder="**************"
                         onChangeText={(val) => setPass(val)}
+                        secureTextEntry={true}
                      />
                   </View>
                   <View style={styles.passView}>
@@ -71,6 +74,7 @@ export default function Signin() {
                      <TextInput
                         style={styles.textInput}
                         placeholder="**************"
+                        secureTextEntry={true}
                      />
                   </View>
                   <View style={styles.viewPrivacy}>

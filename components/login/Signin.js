@@ -49,19 +49,24 @@ export default function Signin(props) {
       {
          /*--------------------- Call API function ---------------------*/
       }
-      const callApi = () => {
-         axios({
+      const callApi = async () => {
+         await axios({
             method: "post",
-            enctype: "application/x-www-form-urlencoded",
+            headers: {
+               "Content-Type": "multipart/form-data",
+            },
             url: apiLib.login,
             data: {
-               username: mail,
-               password: pass,
+               username: "sysadmin",
+               password: "sysadmin",
             },
          })
-            .then((res) => props.navigation.navigate("Home"))
+            .then((res) => {
+               // if (res.status == 404) props.navigation.navigate("Home");
+               Alert.alert(res.data);
+            })
             .catch((error) => {
-               console.error(JSON.stringify(error));
+               console.error(error);
             });
       };
       return (
