@@ -50,6 +50,7 @@ export default function Signin() {
       };
       return (
          <KeyboardAvoidingView style={{ flex: 1 }} behavior="padding">
+            {/*--------------------- Email Field ---------------------*/}
             <ScrollView style={styles.container}>
                <View style={styles.box}>
                   <View style={styles.emailView}>
@@ -60,6 +61,7 @@ export default function Signin() {
                         onChangeText={(val) => setMail(val)}
                      />
                   </View>
+                  {/*--------------------- Password Field ---------------------*/}
                   <View style={styles.passView}>
                      <Text style={styles.email}>Password</Text>
                      <TextInput
@@ -69,6 +71,7 @@ export default function Signin() {
                         secureTextEntry={true}
                      />
                   </View>
+                  {/*--------------------- Re-Password Field ---------------------*/}
                   <View style={styles.passView}>
                      <Text style={styles.email}>Confirm Password</Text>
                      <TextInput
@@ -77,6 +80,7 @@ export default function Signin() {
                         secureTextEntry={true}
                      />
                   </View>
+                  {/*--------------------- Checkbox Field ---------------------*/}
                   <View style={styles.viewPrivacy}>
                      <CheckBox
                         isChecked={isSelected}
@@ -90,6 +94,7 @@ export default function Signin() {
                         I agree with privacy and policy
                      </Text>
                   </View>
+                  {/*--------------------- Confirm Button Field ---------------------*/}
                   <TouchableOpacity
                      style={
                         isSelected

@@ -10,18 +10,18 @@ import {
    BackHandler,
 } from "react-native";
 import { Card } from "react-native-shadow-cards";
-import { WHITE, MEDIUM_PINK, PINK, GRAY } from "../assets/color";
-import logo from "../assets/images/logo.png";
+import { WHITE, MEDIUM_PINK, PINK, GRAY } from "../../assets/color";
+import logo from "../../assets/images/logo.png";
 import * as Font from "expo-font";
 import AppLoading from "expo-app-loading";
 import { NavigationContainer } from "@react-navigation/native";
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
-import Signin from "../components/login/Signin";
-import Signup from "../components/login/Signup";
+import Signin from "../../components/login/Signin";
+import Signup from "../../components/login/Signup";
 // Set up letter fonts
 const getFonts = () => {
    return Font.loadAsync({
-      AveriaSansLibre: require("../assets/fonts/AveriaSansLibre-Regular.ttf"),
+      AveriaSansLibre: require("../../assets/fonts/AveriaSansLibre-Regular.ttf"),
    });
 };
 var { height, width } = Dimensions.get("window");

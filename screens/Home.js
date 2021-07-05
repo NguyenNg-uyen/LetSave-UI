@@ -1,19 +1,12 @@
-import React, { useState } from "react";
-import { StyleSheet, Text, View } from "react-native";
-// Set up letter fonts
+import React from "react";
+import Tabs from "./tabs";
+import { NavigationContainer } from "@react-navigation/native";
 
-export default function Splash() {
+const DailyTransaction = () => {
    return (
-      <View style={styles.container}>
-         <Text>Hello world</Text>
-      </View>
+      <NavigationContainer>
+         <Tabs></Tabs>
+      </NavigationContainer>
    );
-}
-
-// Style
-const styles = StyleSheet.create({
-   container: {
-      flex: 1,
-      justifyContent: "center",
-   },
-});
+};
+export default DailyTransaction;

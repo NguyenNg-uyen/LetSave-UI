@@ -8,16 +8,16 @@ import {
    Animated,
    Dimensions,
 } from "react-native";
-import { GREEN, MEDIUM_PINK } from "../assets/color";
-import logo from "../assets/images/logo.png";
-import money from "../assets/images/money.png";
+import { GREEN, MEDIUM_PINK } from "../../assets/color";
+import logo from "../../assets/images/logo.png";
+import money from "../../assets/images/money.png";
 import * as Font from "expo-font";
 import AppLoading from "expo-app-loading";
 // Set up letter fonts
 const getFonts = () => {
    return Font.loadAsync({
-      Frijole: require("../assets/fonts/Frijole-Regular.ttf"),
-      FrederickatheGreat: require("../assets/fonts/FrederickatheGreat-Regular.ttf"),
+      Frijole: require("../../assets/fonts/Frijole-Regular.ttf"),
+      FrederickatheGreat: require("../../assets/fonts/FrederickatheGreat-Regular.ttf"),
    });
 };
 

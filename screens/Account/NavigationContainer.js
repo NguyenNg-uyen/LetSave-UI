@@ -1,6 +1,6 @@
 import Login from "./Login";
 import Splash from "./Splash";
-import Home from "./Home";
+import Home from "../Home";
 import { createStackNavigator } from "react-navigation-stack";
 import { createAppContainer } from "react-navigation";
 const AppNavigator = createStackNavigator(

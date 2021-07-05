@@ -50,24 +50,25 @@ export default function Signin(props) {
          /*--------------------- Call API function ---------------------*/
       }
       const callApi = async () => {
-         await axios({
-            method: "post",
-            headers: {
-               "Content-Type": "multipart/form-data",
-            },
-            url: apiLib.login,
-            data: {
-               username: "sysadmin",
-               password: "sysadmin",
-            },
-         })
-            .then((res) => {
-               // if (res.status == 404) props.navigation.navigate("Home");
-               Alert.alert(res.data);
-            })
-            .catch((error) => {
-               console.error(error);
-            });
+         // await axios({
+         //    method: "post",
+         //    headers: {
+         //       "Content-Type": "application/x-www-form-urlencoded",
+         //    },
+         //    url: apiLib.login,
+         //    data: {
+         //       username: "sysadmin",
+         //       password: "sysadmin",
+         //    },
+         // })
+         //    .then((res) => {
+         //       // if (res.status == 404) props.navigation.navigate("Home");
+         //       props.navigation.navigate("Home");
+         //    })
+         //    .catch((error) => {
+         //       console.error(error);
+         //    });
+         props.navigation.navigate("Home");
       };
       return (
          <KeyboardAvoidingView
