@@ -48,6 +48,17 @@ export default function Signin() {
                console.error(JSON.stringify(error));
             });
       };
+      {
+         /*--------------------- Validation function ---------------------*/
+      }
+      const validate = () => {
+         const emailRegex =
+            /^[\w-]+(\.[\w-]+)*@([a-z0-9-]+(\.[a-z0-9-]+)*?\.[a-z]{2,6}|(\d{1,3}\.){3}\d{1,3})(:\d{4})?$/;
+         if (!emailRegex.test(mail)) {
+            Alert.alert("Email is not valid");
+            setMail("");
+         }
+      };
       return (
          <KeyboardAvoidingView style={{ flex: 1 }} behavior="padding">
             {/*--------------------- Email Field ---------------------*/}
@@ -59,6 +70,8 @@ export default function Signin() {
                         style={styles.textInput}
                         placeholder="name@domain.com"
                         onChangeText={(val) => setMail(val)}
+                        value={mail}
+                        onBlur={validate}
                      />
                   </View>
                   {/*--------------------- Password Field ---------------------*/}

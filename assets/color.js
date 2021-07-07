@@ -8,3 +8,5 @@ export const BLACK = "#000000";
 export const FACEBOOK = "#4C86D0";
 export const TWITTER = "#0094FF";
 export const GMAIL = "#FF5454";
+export const BLUE = "#52C1F1";
+export const LIGHT_GRAY = "rgba(183,183,183,37)";

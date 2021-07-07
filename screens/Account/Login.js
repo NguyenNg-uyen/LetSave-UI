@@ -37,7 +37,7 @@ export default function Login({ navigation }) {
    if (fontsLoaded)
       return (
          <KeyboardAvoidingView style={styles.container}>
-            <StatusBar />
+            <StatusBar barStyle="white-content" backgroundColor="#000000" />
             <Image style={styles.logo} source={logo} />
             <ScrollView>
                <Card style={styles.box}>
