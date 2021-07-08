@@ -21,7 +21,7 @@ const getFonts = () => {
       PoppinsBold: require("../../assets/fonts/Poppins-Medium.ttf"),
    });
 };
-export default function ReportDetail({ props }) {
+export default function CategoryList({ navigation }) {
    const [fontsLoaded, setFontsLoaded] = useState(false);
    const data = [
       {
@@ -105,7 +105,10 @@ export default function ReportDetail({ props }) {
                data={categoriesListFilter}
                renderItem={renderItem}
             />
-            <TouchableOpacity style={styles.btnAdd}>
+            <TouchableOpacity
+               style={styles.btnAdd}
+               onPress={() => navigation.navigate("AddCategory")}
+            >
                <Text style={styles.plusIcon}>+</Text>
             </TouchableOpacity>
          </View>
