@@ -8,6 +8,7 @@ import {
    KeyboardAvoidingView,
    ScrollView,
    BackHandler,
+   Alert,
 } from "react-native";
 import { Card } from "react-native-shadow-cards";
 import { WHITE, MEDIUM_PINK, PINK, GRAY } from "../../assets/color";
