@@ -21,53 +21,13 @@ const getFonts = () => {
       PoppinsBold: require("../../assets/fonts/Poppins-Medium.ttf"),
    });
 };
-export default function CategoryList({ navigation }) {
+export default function CategoryList({ navigation, category }) {
    const [fontsLoaded, setFontsLoaded] = useState(false);
    const data = [
       {
          id: 1,
          name: "Transportation",
          image: require("../../assets/icons/gas_station_48px.png"),
-      },
-      {
-         id: 2,
-         name: "Food",
-         image: require("../../assets/icons/food_48px.png"),
-      },
-      {
-         id: 3,
-         name: "Sick",
-         image: { uri: "https://i.ibb.co/09zns0N/pill-48px.png" },
-      },
-      {
-         id: 4,
-         name: "Pet",
-         image: require("../../assets/icons/pets_48px.png"),
-      },
-      {
-         id: 4,
-         name: "Shopping",
-         image: require("../../assets/icons/green_dress_48px.png"),
-      },
-      {
-         id: 5,
-         name: "Electric",
-         image: require("../../assets/icons/internet_48px.png"),
-      },
-      {
-         id: 6,
-         name: "Books",
-         image: require("../../assets/icons/pets_48px.png"),
-      },
-      {
-         id: 7,
-         name: "House",
-         image: require("../../assets/icons/house_48px.png"),
-      },
-      {
-         id: 8,
-         name: "House",
-         image: require("../../assets/icons/house_48px.png"),
       },
    ];
    const [categoriesListFilter, setCategoriesListFiler] = useState(data);

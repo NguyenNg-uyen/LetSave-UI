@@ -27,8 +27,12 @@ export default function AddCategory({ navigation }) {
    const [fontsLoaded, setFontsLoaded] = useState(false);
    const [categoryName, setCategotyName] = useState("");
    const [selected, setSelected] = useState({ id: 1 });
+   var category = {};
    const onSelect = (index) => {
       setSelected((prevState) => ({ ...prevState, id: index }));
+      let link = data[index].link;
+      category = { name: categoryName, icon: link };
+      console.log(category);
    };
    const renderItem = ({ item, index }) => {
       return (
@@ -67,7 +71,12 @@ export default function AddCategory({ navigation }) {
                renderItem={renderItem}
                numColumns={5}
             />
-            <TouchableOpacity style={styles.btnSave}>
+            <TouchableOpacity
+               style={styles.btnSave}
+               onPress={() => {
+                  navigation.navigate("CategoryList", category);
+               }}
+            >
                <Text style={styles.textSave}>Save</Text>
             </TouchableOpacity>
          </View>
@@ -122,7 +131,7 @@ const styles = StyleSheet.create({
       borderBottomColor: GRAY,
       borderBottomWidth: 1,
       fontFamily: "PoppinsBold",
-      letterSpacing: 2,
+      letterSpacing: 1,
       marginLeft: 20,
       marginBottom: 20,
    },
