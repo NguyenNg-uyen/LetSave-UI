@@ -37,7 +37,7 @@ export default function CategoryList({ navigation }) {
       {
          id: 3,
          name: "Sick",
-         image: require("../../assets/icons/hospital_3_48px.png"),
+         image: { uri: "https://i.ibb.co/09zns0N/pill-48px.png" },
       },
       {
          id: 4,

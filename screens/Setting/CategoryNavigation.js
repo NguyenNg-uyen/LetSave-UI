@@ -4,7 +4,13 @@ import AddCategory from "./AddCategory";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 const Stack = createStackNavigator();
-
+const getFonts = () => {
+   return Font.loadAsync({
+      PoppinsRegular: require("../../assets/fonts/Poppins-Regular.ttf"),
+      PoppinsBold: require("../../assets/fonts/Poppins-Medium.ttf"),
+   });
+};
+startAsync = { getFonts };
 function CategoryNavigation() {
    return (
       <NavigationContainer>
@@ -17,7 +23,19 @@ function CategoryNavigation() {
             <Stack.Screen
                name="AddCategory"
                component={AddCategory}
-               options={{ title: "Add Category" }}
+               options={{
+                  title: "Add new category",
+                  headerTitleStyle: {
+                     fontFamily: "PoppinsBold",
+                     fontSize: 20,
+                  },
+                  headerStyle: {
+                     height: 80,
+                     borderBottomEndRadius: 20,
+                     borderBottomStartRadius: 20,
+                     borderBottomWidth: 2,
+                  },
+               }}
             />
          </Stack.Navigator>
       </NavigationContainer>
