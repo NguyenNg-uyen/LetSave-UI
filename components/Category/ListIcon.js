@@ -28,9 +28,9 @@ const imagesLink = `https://i.ibb.co/879sWRw/You-Tube-Play-Button-48px.png
     https://i.ibb.co/ByGWWQF/android-48px.png
     https://i.ibb.co/CVG2YHH/administrator-male-48px.png
     https://i.ibb.co/fn6jLV5/airplane-mode-on-48px.png`;
-const listIconArr = imagesLink.split("\n");
-const data = [];
-listIconArr.forEach((item) => {
-   data.push({ link: item.trim() });
+const listIconData = imagesLink.split("\n");
+const iconData = [];
+listIconData.forEach((item) => {
+  iconData.push({ link: item.trim() });
 });
-export default data;
+export default iconData;
