@@ -13,10 +13,7 @@ import * as Font from "expo-font";
 import AppLoading from "expo-app-loading";
 import { ListItem, Avatar } from "react-native-elements";
 import { Searchbar } from "react-native-paper";
-import FontAwesome from "react-native-vector-icons/FontAwesome";
 import iconData from "../../components/Category/ListIcon";
-import AddTransaction from "../Transaction/AddTransaction";
-
 // Set up letter fonts
 const getFonts = () => {
    return Font.loadAsync({
@@ -85,12 +82,6 @@ export default function CategoryList({ navigation, category }) {
                // )}
                renderItem={renderItem}
             />
-            <TouchableOpacity
-               style={styles.btnAdd}
-               onPress={() => navigation.navigate("AddCategory")}
-            >
-               <Text style={styles.plusIcon}>+</Text>
-            </TouchableOpacity>
          </View>
       );
    }

@@ -42,27 +42,25 @@ export default function Login({ navigation }) {
             <Image style={styles.logo} source={logo} />
             <ScrollView>
                <Card style={styles.box}>
-                  <NavigationContainer>
-                     <Tab.Navigator
-                        tabBarOptions={{
-                           labelStyle: {
-                              fontSize: 20,
-                              fontFamily: "AveriaSansLibre",
-                           },
-                           activeTintColor: PINK,
-                           inactiveTintColor: GRAY,
-                           indicatorStyle: {
-                              backgroundColor: PINK,
-                           },
-                        }}
-                     >
-                        <Tab.Screen
-                           name="Sign in"
-                           children={() => <Signin navigation={navigation} />}
-                        />
-                        <Tab.Screen name="Sign up" component={Signup} />
-                     </Tab.Navigator>
-                  </NavigationContainer>
+                  <Tab.Navigator
+                     tabBarOptions={{
+                        labelStyle: {
+                           fontSize: 20,
+                           fontFamily: "AveriaSansLibre",
+                        },
+                        activeTintColor: PINK,
+                        inactiveTintColor: GRAY,
+                        indicatorStyle: {
+                           backgroundColor: PINK,
+                        },
+                     }}
+                  >
+                     <Tab.Screen
+                        name="Sign in"
+                        children={() => <Signin navigation={navigation} />}
+                     />
+                     <Tab.Screen name="Sign up" component={Signup} />
+                  </Tab.Navigator>
                </Card>
             </ScrollView>
             <View style={{ ...styles.circle, right: -130, top: -100 }}></View>
