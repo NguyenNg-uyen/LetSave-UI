@@ -6,7 +6,7 @@ import CongratsScreen from "../Transaction/CongratsScreen";
 import AddExpense from "../Transaction/AddExpense";
 import AddIncome from "../Transaction/AddIncome";
 import AddTransaction from "../Transaction/AddTransaction";
-import CategoryList from "../Transaction/CategoryList";
+import CategoryChoice from "../Transaction/CategoryChoice";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 
@@ -36,13 +36,13 @@ function NavigationWrapper() {
                options={{ headerShown: true }}
             />
             <Stack.Screen
-               name="CategoryList"
-               component={CategoryList}
+               name="AddExpense"
+               component={AddExpense}
                options={{ headerShown: true }}
             />
             <Stack.Screen
-               name="AddExpense"
-               component={AddExpense}
+               name="CategoryChoice"
+               component={CategoryChoice}
                options={{ headerShown: true }}
             />
             <Stack.Screen

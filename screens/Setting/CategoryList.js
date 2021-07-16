@@ -15,7 +15,6 @@ import { ListItem, Avatar } from "react-native-elements";
 import { Searchbar } from "react-native-paper";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import iconData from "../../components/Category/ListIcon";
-import AddTransaction from "../Transaction/AddTransaction";
 
 // Set up letter fonts
 const getFonts = () => {

@@ -21,7 +21,7 @@ const getFonts = () => {
       PoppinsBold: require("../../assets/fonts/Poppins-Medium.ttf"),
    });
 };
-export default function CategoryList({ navigation, category }) {
+export default function CategoryChoice({ navigation }) {
    const [fontsLoaded, setFontsLoaded] = useState(false);
    const data = [
       {
@@ -52,7 +52,12 @@ export default function CategoryList({ navigation, category }) {
          <ListItem bottomDivider>
             <Avatar size="medium" source={item.image} />
             <TouchableOpacity
-               onPress={() => navigation.navigate("AddTransacion")}
+               onPress={() =>
+                  navigation.navigate("AddExpense", {
+                     categoryID: item.id,
+                     categoryName: item.name,
+                  })
+               }
             >
                <ListItem.Content>
                   <ListItem.Title style={styles.textCategoryName}>
@@ -72,14 +77,6 @@ export default function CategoryList({ navigation, category }) {
             <FlatList
                keyExtractor={keyExtractor}
                data={categoriesListFilter}
-               // renderItem={({ renderItem }) => (
-               //   <TouchableOpacity onPress={() => navigation.navigate('AddScreen')}>
-               //     <View>
-               //       <Text>ID: {item.id}</Text>
-               //       <Text>Title: {item.title}</Text>
-               //     </View>
-               //   </TouchableOpacity>
-               // )}
                renderItem={renderItem}
             />
          </View>

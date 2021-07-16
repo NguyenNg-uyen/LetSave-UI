@@ -26,7 +26,6 @@ import congratsImg from "../.././assets/images/CongratIMG.png";
 import { GREEN, MEDIUM_PINK } from "../.././assets/color";
 // Screen
 import DailyScreen from "../Daily Report/DailyScreen";
-import CategoryList from "../Setting/CategoryList";
 // Font
 import * as Font from "expo-font";
 const getFonts = () => {
@@ -37,6 +36,7 @@ const getFonts = () => {
    });
 };
 function AddExpense({ navigation, route }) {
+   const { categoryID, categoryName } = route.params;
    const [fontsLoaded, setFontsLoaded] = useState(false);
    //=========== Date Picker  =================
    const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
@@ -102,7 +102,7 @@ function AddExpense({ navigation, route }) {
                }}
             >
                <TouchableOpacity
-                  onPress={() => navigation.navigate("CategoryList")}
+                  onPress={() => navigation.navigate("CategoryChoice")}
                >
                   <Image
                      source={icon_Category}
@@ -112,6 +112,15 @@ function AddExpense({ navigation, route }) {
                <View style={{ flexDirection: "column", flex: 1 }}>
                   <Text style={[{ marginLeft: 10 }, styles.text_label]}>
                      Category
+                  </Text>
+                  <Text
+                     style={{
+                        marginLeft: 10,
+                        fontSize: 25,
+                        fontFamily: "PoppinsBold",
+                     }}
+                  >
+                     {categoryName}
                   </Text>
                   {/* <Text>{route.params.cateName}</Text> */}
                   {/* <TextInput
@@ -168,7 +177,7 @@ function AddExpense({ navigation, route }) {
                   <TouchableOpacity
                      style={styles.btn_Finish}
                      onPress={() =>
-                        navigation.navigate("Congrats", {
+                        navigation.navigate("CongratsScreen", {
                            // Pass data to Congrats Screen
                            type: "Expense",
                            cate: category,
