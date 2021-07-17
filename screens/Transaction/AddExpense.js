@@ -36,7 +36,11 @@ const getFonts = () => {
    });
 };
 function AddExpense({ navigation, route }) {
-   const { categoryID, categoryName } = route.params;
+   let categoryId, categoryName;
+   if (route.params !== undefined) {
+      categoryId = route.params.categoryId;
+      categoryName = route.params.categoryName;
+   }
    const [fontsLoaded, setFontsLoaded] = useState(false);
    //=========== Date Picker  =================
    const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
@@ -120,7 +124,7 @@ function AddExpense({ navigation, route }) {
                         fontFamily: "PoppinsBold",
                      }}
                   >
-                     {categoryName}
+                     {categoryName !== undefined ? categoryName : ""}
                   </Text>
                   {/* <Text>{route.params.cateName}</Text> */}
                   {/* <TextInput

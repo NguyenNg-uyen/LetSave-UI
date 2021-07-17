@@ -71,10 +71,7 @@ export default function Signin(props) {
          props.navigation.navigate("Tabs");
       };
       return (
-         <KeyboardAvoidingView
-            behavior={Platform.OS === "ios" ? "padding" : "height"}
-            style={{ flex: 1 }}
-         >
+         <KeyboardAvoidingView>
             <ScrollView style={styles.container}>
                <View style={styles.box}>
                   {/*--------------------- Email input and label ---------------------*/}

@@ -41,7 +41,7 @@ export default function Login({ navigation }) {
             <StatusBar barStyle="white-content" backgroundColor="#000000" />
             <Image style={styles.logo} source={logo} />
             <ScrollView>
-               <Card style={styles.box}>
+               <View style={styles.box}>
                   <Tab.Navigator
                      tabBarOptions={{
                         labelStyle: {
@@ -61,7 +61,7 @@ export default function Login({ navigation }) {
                      />
                      <Tab.Screen name="Sign up" component={Signup} />
                   </Tab.Navigator>
-               </Card>
+               </View>
             </ScrollView>
             <View style={{ ...styles.circle, right: -130, top: -100 }}></View>
          </KeyboardAvoidingView>
@@ -101,6 +101,7 @@ const styles = StyleSheet.create({
       backgroundColor: WHITE,
       borderRadius: 30,
       overflow: "hidden",
+      opacity: 20,
    },
    circle: {
       backgroundColor: "#ffffff",
