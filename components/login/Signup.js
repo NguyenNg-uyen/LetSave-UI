@@ -34,7 +34,6 @@ export default function Signin() {
       const callApi = async () => {
          await axios({
             method: "post",
-            enctype: "application/json",
             url: apiLib.register,
             data: {
                username: mail,

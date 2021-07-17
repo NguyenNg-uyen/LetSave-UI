@@ -17,7 +17,7 @@ import AddTransaction from "./Transaction/AddTransaction";
 
 // import money from "../assets/images/money.png";
 const Tab = createBottomTabNavigator();
-const Tabs = ({ navigation }) => {
+const Home = ({ navigation }) => {
    const CustomTabBarButton = ({ children, onPress }) => (
       <TouchableOpacity
          style={{
@@ -194,4 +194,4 @@ const Tabs = ({ navigation }) => {
    );
 };
 
-export default Tabs;
+export default Home;

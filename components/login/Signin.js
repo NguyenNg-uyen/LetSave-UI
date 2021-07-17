@@ -50,29 +50,27 @@ export default function Signin(props) {
          /*--------------------- Call API function ---------------------*/
       }
       const callApi = async () => {
-         // await axios({
-         //    method: "post",
-         //    headers: {
-         //       "Content-Type": "application/x-www-form-urlencoded",
-         //    },
-         //    url: apiLib.login,
-         //    data: {
-         //       username: "sysadmin",
-         //       password: "sysadmin",
-         //    },
-         // })
+         // await axios
+         //    .post(apiLib.login, {
+         //       auth: {
+         //          username: mail,
+         //          password: pass,
+         //       },
+         //    })
          //    .then((res) => {
-         //       // if (res.status == 404) props.navigation.navigate("Home");
-         //       props.navigation.navigate("Home");
+         //       if (res.status == 200) {
+         //          Alert.alert("Login successfully");
+         props.navigation.navigate("Home");
+         //       }
          //    })
          //    .catch((error) => {
          //       console.error(error);
          //    });
-         props.navigation.navigate("Tabs");
+         // props.navigation.navigate("Home");
       };
       return (
-         <KeyboardAvoidingView>
-            <ScrollView style={styles.container}>
+         <ScrollView>
+            <KeyboardAvoidingView style={styles.container}>
                <View style={styles.box}>
                   {/*--------------------- Email input and label ---------------------*/}
                   <View style={styles.emailView}>
@@ -166,8 +164,9 @@ export default function Signin(props) {
                      Continue as guesst
                   </Text>
                </View>
-            </ScrollView>
-         </KeyboardAvoidingView>
+               <View style={{ height: 70 }}></View>
+            </KeyboardAvoidingView>
+         </ScrollView>
       );
    }
    // In case fonts are not loaded successfully

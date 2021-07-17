@@ -1,7 +1,7 @@
 import * as React from "react";
 import Login from "./Login";
 import Splash from "./Splash";
-import tabs from "../tabs";
+import Home from "../Home";
 import CongratsScreen from "../Transaction/CongratsScreen";
 import AddExpense from "../Transaction/AddExpense";
 import AddIncome from "../Transaction/AddIncome";
@@ -9,7 +9,8 @@ import AddTransaction from "../Transaction/AddTransaction";
 import CategoryChoice from "../Transaction/CategoryChoice";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
-
+import StatScreen from "../Monthly Report/StatScreen";
+import ReportDetail from "../Monthly Report/ReportDetail";
 function NavigationWrapper() {
    const Stack = createStackNavigator();
    return (
@@ -26,8 +27,8 @@ function NavigationWrapper() {
                options={{ headerShown: false }}
             />
             <Stack.Screen
-               name="Tabs"
-               component={tabs}
+               name="Home"
+               component={Home}
                options={{ headerShown: false }}
             />
             <Stack.Screen
@@ -54,6 +55,16 @@ function NavigationWrapper() {
                name="CongratsScreen"
                component={CongratsScreen}
                options={{ headerShown: false }}
+            />
+            <Stack.Screen
+               name="StatScreen"
+               component={StatScreen}
+               options={{ headerShown: false }}
+            />
+            <Stack.Screen
+               name="ReportDetail"
+               component={ReportDetail}
+               options={{ headerShown: true }}
             />
          </Stack.Navigator>
       </NavigationContainer>
