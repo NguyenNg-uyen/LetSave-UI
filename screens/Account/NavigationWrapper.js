@@ -11,6 +11,10 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import StatScreen from "../Monthly Report/StatScreen";
 import ReportDetail from "../Monthly Report/ReportDetail";
+import ProfileScreen from "../Profile/ProfileScreen";
+import SettingScreen from "../Setting/SettingScreen";
+import CategoryList from "../Setting/CategoryList";
+import AddCategory from "../Setting/AddCategory";
 function NavigationWrapper() {
    const Stack = createStackNavigator();
    return (
@@ -64,6 +68,26 @@ function NavigationWrapper() {
             <Stack.Screen
                name="ReportDetail"
                component={ReportDetail}
+               options={{ headerShown: true }}
+            />
+            <Stack.Screen
+               name="ProfileScreen"
+               component={ProfileScreen}
+               options={{ headerShown: true }}
+            />
+            <Stack.Screen
+               name="SettingScreen"
+               component={SettingScreen}
+               options={{ headerShown: true }}
+            />
+            <Stack.Screen
+               name="CategoryList"
+               component={CategoryList}
+               options={{ headerShown: true }}
+            />
+            <Stack.Screen
+               name="AddCategory"
+               component={AddCategory}
                options={{ headerShown: true }}
             />
          </Stack.Navigator>

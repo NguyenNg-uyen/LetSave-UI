@@ -184,7 +184,7 @@ const Home = ({ navigation }) => {
                            top: 5,
                         }}
                      >
-                        Budget
+                        Profile
                      </Text>
                   </View>
                ),
