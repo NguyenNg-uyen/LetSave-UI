@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import {
    StyleSheet,
    View,
@@ -13,9 +13,8 @@ import * as Font from "expo-font";
 import AppLoading from "expo-app-loading";
 import { ListItem, Avatar } from "react-native-elements";
 import { Searchbar } from "react-native-paper";
-import FontAwesome from "react-native-vector-icons/FontAwesome";
-import iconData from "../../components/Category/ListIcon";
-
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import axios from "axios";
 // Set up letter fonts
 const getFonts = () => {
    return Font.loadAsync({
@@ -23,25 +22,34 @@ const getFonts = () => {
       PoppinsBold: require("../../assets/fonts/Poppins-Medium.ttf"),
    });
 };
-export default function CategoryList({ navigation, category }) {
+//================= Get Data Function =======================
+export default function CategoryList({ navigation }) {
    const [fontsLoaded, setFontsLoaded] = useState(false);
-   const data = [
-      {
-         id: 1,
-         name: "Transportation",
-         image: require("../../assets/icons/gas_station_48px.png"),
-      },
-      {
-         id: 2,
-         name: "Motor",
-         image: { uri: iconData[9].link },
-      },
-   ];
-   // Searching Data
-   const [categoriesListFilter, setCategoriesListFiler] = useState(data);
+   const [categoriesListFilter, setCategoriesListFiler] = useState([]);
+   const ref = useRef([]);
+   useEffect(() => {
+      const getCategoriesList = async () => {
+         let username = await AsyncStorage.getItem("username");
+         let password = await AsyncStorage.getItem("password");
+         const res = await axios({
+            method: "GET",
+            url: "http://localhost:8080/categories",
+            auth: {
+               username: username,
+               password: password,
+            },
+         });
+         ref.current = res.data;
+         console.log(ref.current);
+         setCategoriesListFiler(ref.current);
+         return res;
+      };
+      getCategoriesList();
+   }, []);
+   // ===================== Searching Category Function ======================
    const handleSearch = (text) => {
       setCategoriesListFiler(
-         data.filter((category) => {
+         ref.current.filter((category) => {
             return category.name.toLowerCase().includes(text.toLowerCase());
          })
       );
@@ -49,19 +57,14 @@ export default function CategoryList({ navigation, category }) {
    // If fonts are loaded successfully
    if (fontsLoaded) {
       const keyExtractor = (item, index) => index.toString();
-
       const renderItem = ({ item }) => (
          <ListItem bottomDivider>
             <Avatar size="medium" source={item.image} />
-            <TouchableOpacity
-               onPress={() => navigation.navigate("AddTransacion")}
-            >
-               <ListItem.Content>
-                  <ListItem.Title style={styles.textCategoryName}>
-                     {item.name}
-                  </ListItem.Title>
-               </ListItem.Content>
-            </TouchableOpacity>
+            <ListItem.Content>
+               <ListItem.Title style={styles.textCategoryName}>
+                  {item.name}
+               </ListItem.Title>
+            </ListItem.Content>
          </ListItem>
       );
       return (
@@ -74,14 +77,6 @@ export default function CategoryList({ navigation, category }) {
             <FlatList
                keyExtractor={keyExtractor}
                data={categoriesListFilter}
-               // renderItem={({ renderItem }) => (
-               //   <TouchableOpacity onPress={() => navigation.navigate('AddScreen')}>
-               //     <View>
-               //       <Text>ID: {item.id}</Text>
-               //       <Text>Title: {item.title}</Text>
-               //     </View>
-               //   </TouchableOpacity>
-               // )}
                renderItem={renderItem}
             />
             <TouchableOpacity

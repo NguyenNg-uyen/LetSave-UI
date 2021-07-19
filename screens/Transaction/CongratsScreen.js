@@ -9,8 +9,6 @@ import {
    TextInput,
    Button,
 } from "react-native";
-import { NavigationContainer } from "@react-navigation/native";
-import { createStackNavigator } from "@react-navigation/stack";
 import AppLoading from "expo-app-loading";
 import CurrencyInput from "react-native-currency-input";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
@@ -91,7 +89,7 @@ function CongratsScreen({ route, navigation }) {
                   {/* Link to daily transaction  */}
                   <TouchableOpacity
                      style={styles.btn_Finish2}
-                     onPress={() => navigation.navigate("Tabs")}
+                     onPress={() => navigation.navigate("Home")}
                   >
                      <Text
                         style={{

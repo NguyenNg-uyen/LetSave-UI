@@ -23,6 +23,7 @@ import Icon from "react-native-vector-icons/FontAwesome";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import AppLoading from "expo-app-loading";
 import apiLib from "../../assets/ApiStore";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 // Set up letter fonts
 const getFonts = () => {
    return Font.loadAsync({
@@ -49,24 +50,30 @@ export default function Signin(props) {
       {
          /*--------------------- Call API function ---------------------*/
       }
+      const storeData = async (key, value) => {
+         try {
+            await AsyncStorage.setItem(key, value);
+         } catch (e) {
+            // saving error
+         }
+      };
       const callApi = async () => {
-         // await axios
-         //    .post(apiLib.login, {
-         //       auth: {
-         //          username: mail,
-         //          password: pass,
-         //       },
-         //    })
-         //    .then((res) => {
-         //       if (res.status == 200) {
-         //          Alert.alert("Login successfully");
-         props.navigation.navigate("Home");
-         //       }
-         //    })
-         //    .catch((error) => {
-         //       console.error(error);
-         //    });
-         // props.navigation.navigate("Home");
+         await axios
+            .post("http://localhost:8080/login", {
+               username: mail,
+               password: pass,
+            })
+            .then((res) => {
+               if (res.status == 200) {
+                  storeData("username", mail);
+                  storeData("password", pass);
+                  Alert.alert("Login successfully");
+                  props.navigation.navigate("Home");
+               }
+            })
+            .catch((error) => {
+               console.error(error);
+            });
       };
       return (
          <ScrollView>
