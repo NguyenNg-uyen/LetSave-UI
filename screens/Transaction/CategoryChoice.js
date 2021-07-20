@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import {
    StyleSheet,
    View,
@@ -14,6 +14,8 @@ import AppLoading from "expo-app-loading";
 import { ListItem, Avatar } from "react-native-elements";
 import { Searchbar } from "react-native-paper";
 import iconData from "../../components/Category/ListIcon";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import axios from "axios";
 // Set up letter fonts
 const getFonts = () => {
    return Font.loadAsync({
@@ -23,20 +25,28 @@ const getFonts = () => {
 };
 export default function CategoryChoice({ navigation }) {
    const [fontsLoaded, setFontsLoaded] = useState(false);
-   const data = [
-      {
-         id: 1,
-         name: "Transportation",
-         image: require("../../assets/icons/gas_station_48px.png"),
-      },
-      {
-         id: 2,
-         name: "Motor",
-         image: { uri: iconData[9].link },
-      },
-   ];
-   // Searching Data
-   const [categoriesListFilter, setCategoriesListFiler] = useState(data);
+   const [categoriesListFilter, setCategoriesListFiler] = useState([]);
+   const ref = useRef([]);
+   useEffect(() => {
+      const getCategoriesList = async () => {
+         let username = await AsyncStorage.getItem("username");
+         let password = await AsyncStorage.getItem("password");
+         const res = await axios({
+            method: "GET",
+            url: "http://localhost:8080/categories",
+            auth: {
+               username: username,
+               password: password,
+            },
+         });
+         ref.current = res.data;
+         setCategoriesListFiler(ref.current);
+         return res;
+      };
+      getCategoriesList();
+   }, []);
+
+   //======================   Searching Data Function ======================
    const handleSearch = (text) => {
       setCategoriesListFiler(
          data.filter((category) => {

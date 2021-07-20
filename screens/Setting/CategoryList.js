@@ -39,8 +39,7 @@ export default function CategoryList({ navigation }) {
                password: password,
             },
          });
-         ref.current = res.data;
-         console.log(ref.current);
+         ref.current = res.data;         
          setCategoriesListFiler(ref.current);
          return res;
       };
