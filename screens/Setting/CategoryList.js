@@ -15,6 +15,16 @@ import { ListItem, Avatar } from "react-native-elements";
 import { Searchbar } from "react-native-paper";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
+import apiLib from "../../assets/ApiStore";
+import { decode, encode } from "base-64";
+
+if (!global.btoa) {
+   global.btoa = encode;
+}
+
+if (!global.atob) {
+   global.atob = decode;
+}
 // Set up letter fonts
 const getFonts = () => {
    return Font.loadAsync({
@@ -33,13 +43,13 @@ export default function CategoryList({ navigation }) {
          let password = await AsyncStorage.getItem("password");
          const res = await axios({
             method: "GET",
-            url: "http://localhost:8080/categories",
+            url: apiLib.getCategories,
             auth: {
                username: username,
                password: password,
             },
          });
-         ref.current = res.data;         
+         ref.current = res.data;
          setCategoriesListFiler(ref.current);
          return res;
       };
@@ -58,7 +68,7 @@ export default function CategoryList({ navigation }) {
       const keyExtractor = (item, index) => index.toString();
       const renderItem = ({ item }) => (
          <ListItem bottomDivider>
-            <Avatar size="medium" source={item.image} />
+            <Avatar size="medium" source={{ uri: item.image }} />
             <ListItem.Content>
                <ListItem.Title style={styles.textCategoryName}>
                   {item.name}

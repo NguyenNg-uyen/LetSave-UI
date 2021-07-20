@@ -160,7 +160,7 @@ const styles = StyleSheet.create({
       height: 114,
       backgroundColor: PINK,
       borderRadius: 22,
-      marginTop: 95,
+      marginTop: 20,
       marginBottom: 30,
       padding: 20,
       position: "relative",

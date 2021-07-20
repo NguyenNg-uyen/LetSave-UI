@@ -16,6 +16,16 @@ import { Searchbar } from "react-native-paper";
 import iconData from "../../components/Category/ListIcon";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
+import apiLib from "../../assets/ApiStore";
+import { decode, encode } from "base-64";
+
+if (!global.btoa) {
+   global.btoa = encode;
+}
+
+if (!global.atob) {
+   global.atob = decode;
+}
 // Set up letter fonts
 const getFonts = () => {
    return Font.loadAsync({
@@ -33,7 +43,7 @@ export default function CategoryChoice({ navigation }) {
          let password = await AsyncStorage.getItem("password");
          const res = await axios({
             method: "GET",
-            url: "http://localhost:8080/categories",
+            url: apiLib.getCategories,
             auth: {
                username: username,
                password: password,
@@ -49,7 +59,7 @@ export default function CategoryChoice({ navigation }) {
    //======================   Searching Data Function ======================
    const handleSearch = (text) => {
       setCategoriesListFiler(
-         data.filter((category) => {
+         ref.current.filter((category) => {
             return category.name.toLowerCase().includes(text.toLowerCase());
          })
       );
@@ -60,7 +70,7 @@ export default function CategoryChoice({ navigation }) {
 
       const renderItem = ({ item }) => (
          <ListItem bottomDivider>
-            <Avatar size="medium" source={item.image} />
+            <Avatar size="medium" source={{ uri: item.image }} />
             <TouchableOpacity
                onPress={() =>
                   navigation.navigate("AddExpense", {
