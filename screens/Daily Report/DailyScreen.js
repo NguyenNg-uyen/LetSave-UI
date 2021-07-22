@@ -25,6 +25,9 @@ const getFonts = () => {
 
 export default function DailyScreen() {
    const [data, setData] = useState([]);
+   const [avatar, setAvatar] = useState("");
+   const [fullname, setFullname] = useState("");
+   const [balance, setBalance] = useState(0); 
 
    useEffect(() => {
 
@@ -32,6 +35,7 @@ export default function DailyScreen() {
          const username = await AsyncStorage.getItem("username");
          const password = await AsyncStorage.getItem("password");
 
+         // get daily transaction
          axios({
             method: 'GET',
             url: 'http://localhost:8080/transactions/daily',
@@ -50,6 +54,39 @@ export default function DailyScreen() {
                   return item;
                });
                setData(newlist);
+            })
+            .catch(err => {
+               console.log(err);
+            });
+
+         // Get fullname and avatar
+         axios({
+            method: 'GET',
+            url: 'http://localhost:8080/accounts/profile',
+            auth: {
+               username: username,
+               password: password
+            }
+         })
+            .then(res => {
+               setFullname(res.data.fullname);
+               setAvatar(res.data.avatar);
+            })
+            .catch(err => {
+               console.log(err);
+            });
+
+         // Get balance
+         axios({
+            method: 'GET',
+            url: 'http://localhost:8080/balances',
+            auth: {
+               username: username,
+               password: password
+            }
+         })
+            .then(res => {
+               setBalance(res.data.total);
             })
             .catch(err => {
                console.log(err);
@@ -84,7 +121,7 @@ export default function DailyScreen() {
             <View name="user" style={styles.profile1}>
                <View name="avatar">
                   <View style={styles.avatarbackground}>
-                     <Image style={styles.image} source={stat} />
+                     <Image style={styles.image} source={avatar} />
                   </View>
                </View>
                <Text
@@ -98,7 +135,7 @@ export default function DailyScreen() {
                   }}
                >
                   {" "}
-                  Hà Huy Thông{" "}
+                  {fullname}{" "}
                </Text>
             </View>
             <View style={{ left: 120, top: 14, left: 60 }}>
@@ -109,7 +146,7 @@ export default function DailyScreen() {
                      fontFamily: "Poppins",
                   }}
                >
-                  $4225.450
+                  ${balance}
                </Text>
                <Text
                   style={{
