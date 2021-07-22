@@ -24,6 +24,7 @@ import FontAwesome from "react-native-vector-icons/FontAwesome";
 import AppLoading from "expo-app-loading";
 import apiLib from "../../assets/ApiStore";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useToast } from "native-base";
 // Set up letter fonts
 const getFonts = () => {
    return Font.loadAsync({
@@ -34,7 +35,7 @@ export default function Signin(props) {
    const [fontsLoaded, setFontsLoaded] = useState(false);
    const [mail, setMail] = useState("");
    const [pass, setPass] = useState("");
-
+   const toast = useToast();
    // If fonts are loaded successfully
    if (fontsLoaded) {
       // Divide social and login
@@ -67,11 +68,17 @@ export default function Signin(props) {
                if (res.status == 200) {
                   storeData("username", mail);
                   storeData("password", pass);
-                  Alert.alert("Login successfully");
+                  toast.show({
+                     title: "Hello world",
+                     placement: "bottom",
+                  });
+                  setMail("");
+                  setPass("");
                   props.navigation.navigate("Home");
                }
             })
             .catch((error) => {
+               // Alert.alert("Wrong username or password!");
                console.error(error);
             });
       };
@@ -87,6 +94,7 @@ export default function Signin(props) {
                         keyboardType="email-address"
                         placeholder="name@domain.com"
                         onChangeText={(val) => setMail(val)}
+                        value={mail}
                      />
                   </View>
                   {/*--------------------- Password input and label --------------------- */}
@@ -98,6 +106,7 @@ export default function Signin(props) {
                            placeholder="**************"
                            secureTextEntry={true}
                            onChangeText={(val) => setPass(val)}
+                           value={pass}
                         />
                      </View>
                      {/*------------ Login button ---------------*/}

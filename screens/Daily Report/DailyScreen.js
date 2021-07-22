@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
    StyleSheet,
    Text,
@@ -14,6 +14,10 @@ import stat from "../.././assets/images/logo.png";
 import Icon from "react-native-vector-icons/FontAwesome";
 import AppLoading from "expo-app-loading";
 import * as Font from "expo-font";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import axios from "axios";
+import apiLib from "../../assets/ApiStore";
+import logo from "../../assets/images/logo.png";
 const getFonts = () => {
    return Font.loadAsync({
       Frijole: require("../../assets/fonts/Frijole-Regular.ttf"),
@@ -22,64 +26,77 @@ const getFonts = () => {
 };
 
 export default function DailyScreen() {
-   const DATA = [
-      {
-         id: "1",
-         image: require("../.././assets/images/logo.png"),
-         service: "Food & Bevrage",
-         timeline: "Fri 10AM",
-         money: "-1220,2$",
-      },
-      {
-         id: "2",
-         image: require("../.././assets/images/logo.png"),
-         service: "Food & Bevrage",
-         timeline: "Fri 10AM",
-         money: "-1220,2$",
-      },
-      {
-         id: "3",
-         image: require("../.././assets/images/logo.png"),
-         service: "Food & Bevrage",
-         timeline: "Fri 10AM",
-         money: "-1220,2$",
-      },
-      {
-         id: "4",
-         image: require("../.././assets/images/logo.png"),
-         service: "Food & Bevrage",
-         timeline: "Fri 10AM",
-         money: "-1220,2$",
-      },
-      {
-         id: "5",
-         image: require("../.././assets/images/logo.png"),
-         service: "Food & Bevrage",
-         timeline: "Fri 10AM",
-         money: "-1220,2$",
-      },
-      {
-         id: "6",
-         image: require("../.././assets/images/logo.png"),
-         service: "Food & Bevrage",
-         timeline: "Fri 10AM",
-         money: "-1220,2$",
-      },
-      {
-         id: "7",
-         image: require("../.././assets/images/logo.png"),
-         service: "Food & Bevrage",
-         timeline: "Fri 10AM",
-         money: "-1220,2$",
-      },
-      {
-         id: "8",
-         image: require("../.././assets/images/logo.png"),
-         service: "Food & Bevrage",
-         timeline: "Fri 10AM",
-         money: "-1220,2$",
-      },
-   ];
+   const [data, setData] = useState([]);
+   const [avatar, setAvatar] = useState("");
+   const [fullname, setFullname] = useState("");
+   const [balance, setBalance] = useState(0);
+
+   useEffect(() => {
+      const getDailyTransactions = async () => {
+         const username = await AsyncStorage.getItem("username");
+         const password = await AsyncStorage.getItem("password");
+
+         // get daily transaction
+         axios({
+            method: "GET",
+            url: apiLib.getDailyTransactioninCurrentYear,
+            auth: {
+               username: username,
+               password: password,
+            },
+         })
+            .then((res) => {
+               let newlist = res.data.map((item) => {
+                  if (item.type == "Expense") {
+                     item.amount = "-" + item.amount;
+                  } else if (item.type == "Income") {
+                     item.amount = "+" + item.amount;
+                  }
+                  return item;
+               });
+               setData(newlist);
+            })
+            .catch((err) => {
+               console.error(err);
+            });
+
+         // Get fullname and avatar
+         axios({
+            method: "GET",
+            url: apiLib.getProfile,
+            auth: {
+               username: username,
+               password: password,
+            },
+         })
+            .then((res) => {
+               setFullname(res.data.fullname);
+               setAvatar(res.data.avatar);
+            })
+            .catch((err) => {
+               console.error(err);
+            });
+
+         // Get balance
+         // axios({
+         //    method: "GET",
+         //    url: "http://localhost:8080/balances",
+         //    auth: {
+         //       username: username,
+         //       password: password,
+         //    },
+         // })
+         //    .then((res) => {
+         //       setBalance(res.data.total);
+         //    })
+         //    .catch((err) => {
+         //       console.error(err);
+         //    });
+      };
+
+      getDailyTransactions();
+   }, []);
+
    const Item = ({ image, service, timeline, money }) => (
       <View style={styles.item}>
          <Image source={image} style={styles.itemicon} />
@@ -89,10 +106,10 @@ export default function DailyScreen() {
    );
    const renderItem = ({ item }) => (
       <Item
-         image={item.image}
-         service={item.service}
-         timeline={item.timeline}
-         money={item.money}
+         image={item.categoryImage}
+         service={item.type}
+         timeline={item.date}
+         money={item.amount}
       />
    );
    const [fontsLoaded, setFontsLoaded] = useState(false);
@@ -104,7 +121,7 @@ export default function DailyScreen() {
             <View name="user" style={styles.profile1}>
                <View name="avatar">
                   <View style={styles.avatarbackground}>
-                     <Image style={styles.image} source={stat} />
+                     <Image style={styles.image} source={logo} />
                   </View>
                </View>
                <Text
@@ -118,7 +135,7 @@ export default function DailyScreen() {
                   }}
                >
                   {" "}
-                  Hà Huy Thông{" "}
+                  {fullname}{" "}
                </Text>
             </View>
             <View style={{ left: 120, top: 14, left: 60 }}>
@@ -129,7 +146,7 @@ export default function DailyScreen() {
                      fontFamily: "Poppins",
                   }}
                >
-                  $4225.450
+                  0${/* ${balance} */}
                </Text>
                <Text
                   style={{
@@ -164,7 +181,7 @@ export default function DailyScreen() {
                ></Icon>
                <SafeAreaView style={styles.FlatList}>
                   <FlatList
-                     data={DATA}
+                     data={data}
                      renderItem={renderItem}
                      keyExtractor={(item) => item.id}
                   />
@@ -223,7 +240,7 @@ const styles = StyleSheet.create({
       alignSelf: "flex-start",
    },
    container: {
-      top: 0,
+      top: 40,
       flex: 1,
       alignItems: "center",
       justifyContent: "center",

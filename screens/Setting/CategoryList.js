@@ -32,6 +32,7 @@ const getFonts = () => {
       PoppinsBold: require("../../assets/fonts/Poppins-Medium.ttf"),
    });
 };
+
 //================= Get Data Function =======================
 export default function CategoryList({ navigation }) {
    const [fontsLoaded, setFontsLoaded] = useState(false);

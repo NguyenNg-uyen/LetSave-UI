@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import {
    StyleSheet,
    View,
@@ -12,7 +12,17 @@ import * as Font from "expo-font";
 import AppLoading from "expo-app-loading";
 import coins from "../../assets/images/coins.png";
 import { ListItem, Avatar } from "react-native-elements";
-import { Card } from "react-native-shadow-cards";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import axios from "axios";
+import apiLib from "../../assets/ApiStore";
+import { decode, encode } from "base-64";
+import cash from "../../assets/cash_48px.png";
+if (!global.btoa) {
+   global.btoa = encode;
+}
+if (!global.atob) {
+   global.atob = decode;
+}
 // Set up letter fonts
 const getFonts = () => {
    return Font.loadAsync({
@@ -22,35 +32,66 @@ const getFonts = () => {
 };
 export default function ReportDetail({ props, route }) {
    const [fontsLoaded, setFontsLoaded] = useState(false);
+   const [transactionList, setTransactionList] = useState([]);
+   useEffect(() => {
+      const getTransactionsList = async () => {
+         let username = await AsyncStorage.getItem("username");
+         let password = await AsyncStorage.getItem("password");
+         axios({
+            method: "POST",
+            url: apiLib.getAllTransactionsInAMonth,
+            auth: {
+               username: username,
+               password: password,
+            },
+            data: {
+               type: route.params.transactionType,
+            },
+         })
+            .then((res) => {
+               let formatAmount = res.data.map((item) => {
+                  if (item.type == "Expense") item.amount = "- $" + item.amount;
+                  else item.amount = "+ $" + item.amount;
+                  return item;
+               });
+               if (res.status == 200) setTransactionList(formatAmount);
+            })
+            .catch((err) => console.error(err));
+      };
+      getTransactionsList();
+   }, []);
+
    // If fonts are loaded successfully
    if (fontsLoaded) {
-      // Transaction detail list data for showing
-      const transactions = [
-         { id: 1, categoryName: "Food", amount: 100, date: "Fri 10AM" },
-         { id: 2, categoryName: "Pets", amount: 120, date: "Fri 10AM" },
-         { id: 3, categoryName: "Shopping", amount: 10, date: "Fri 10AM" },
-         { id: 4, categoryName: "House", amount: 10, date: "Fri 10AM" },
-         { id: 5, categoryName: "Electric", amount: 10, date: "Fri 10AM" },
-         { id: 5, categoryName: "Electric", amount: 10, date: "Fri 10AM" },
-         { id: 5, categoryName: "Electric", amount: 10, date: "Fri 10AM" },
-      ];
-      // List view render
+      // ================= List view render ==================
       const renderItem = ({ item }) => (
          <ListItem bottomDivider>
             <Avatar
                size="medium"
-               source={{ uri: "https://i.ibb.co/zZ85M67/soccer-ball-48px.png" }}
+               source={
+                  route.params.transactionType == "Expense"
+                     ? { uri: item.categoryImage }
+                     : cash
+               }
             />
             <ListItem.Content style={{ marginVertical: 5 }}>
                <ListItem.Title style={styles.categoryName}>
-                  {item.categoryName}
+                  {route.params.transactionType == "Income"
+                     ? item.note
+                     : item.categoryName}
                </ListItem.Title>
                <ListItem.Subtitle style={styles.detailDate}>
                   {item.date}
                </ListItem.Subtitle>
             </ListItem.Content>
-            <ListItem.Title style={styles.amount}>
-               - ${item.amount}
+            <ListItem.Title
+               style={
+                  route.params.transactionType == "Income"
+                     ? [{ color: BLUE }, styles.categoryName]
+                     : [{ color: PINK }, styles.categoryName]
+               }
+            >
+               {item.amount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
             </ListItem.Title>
          </ListItem>
       );
@@ -88,7 +129,7 @@ export default function ReportDetail({ props, route }) {
                keyExtractor={(item, index) => {
                   return index.toString();
                }}
-               data={transactions}
+               data={transactionList}
                renderItem={renderItem}
             />
          </View>
@@ -114,6 +155,7 @@ const styles = StyleSheet.create({
       flexDirection: "column",
       alignContent: "center",
       alignItems: "center",
+      backgroundColor: WHITE,
    },
    titleView: {
       height: 140,

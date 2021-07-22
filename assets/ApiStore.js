@@ -1,4 +1,5 @@
-const BaseURL = "http://10.0.2.2:8080";
+// const BaseURL = "http://10.0.2.2:8080";
+const BaseURL = "http://localhost:8080";
 const apiLib = {
    login: BaseURL + "/login",
    register: BaseURL + "/accounts/register",
@@ -11,7 +12,8 @@ const apiLib = {
    getDailyTransactioninCurrentYear: BaseURL + "/transactions/daily",
    getTransactionByParticularDate: BaseURL + "/transactions/date",
    getMonthlyTransactioninCurrentYear: BaseURL + "/transactions/month",
-   getMothlyTransactionByParticularYear: BaseURL + "/transactions/month",
+   getMonthlyTransactionByParticularYear: BaseURL + "/transactions/month",
+   getAllTransactionsInAMonth: BaseURL + "/transactions/month/all",
    updateTransaction: BaseURL + "/transactions/",
    getTransactionbyID: BaseURL + "/transactions/",
    createBudget: BaseURL + "/budgets",

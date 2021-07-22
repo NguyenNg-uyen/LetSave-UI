@@ -132,7 +132,11 @@ function SettingScreen({ navigation }) {
             {/* Horizontal line */}
             <View style={styles.horizontalline}></View>
             {/* =========================== LOG OUT ===================================== */}
-            <TouchableOpacity>
+            <TouchableOpacity
+               onPress={() => {
+                  navigation.navigate("Login");
+               }}
+            >
                <View style={{ flexDirection: "row" }}>
                   <Image source={icon_logOut} style={styles.icon_style} />
                   <View style={{ flexDirection: "column" }}>
