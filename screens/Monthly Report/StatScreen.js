@@ -8,12 +8,12 @@ import {
    Dimensions,
    TouchableOpacity,
 } from "react-native";
-import MonthPicker from 'react-native-month-year-picker';
+import ModalPicker from "../ModalPicker";
 import AppLoading from "expo-app-loading";
 import CalendarStrip from "react-native-calendar-strip";
 import * as Font from "expo-font";
 import { LineChart } from "react-native-chart-kit";
-import { PINK } from "../../assets/color";
+import { LIGHT_GRAY, PINK } from "../../assets/color";
 import { WHITE } from "../../assets/color";
 import Icon from "react-native-vector-icons/FontAwesome";
 import Calendar from "react-calendar";
@@ -30,14 +30,14 @@ const getFonts = () => {
 };
 export default function StatScreen({ navigation }) {
    const [date, setDate] = useState(new Date())
-   const onChange = date =>
-   {
+   const onChange = date => {
       setDate(date);
    }
    const [fontsLoaded, setFontsLoaded] = useState(false);
    // If fonts are loaded successfully
    if (fontsLoaded)
       return (
+         
          <View style={styles.container}>
             <Text
                style={{
@@ -45,13 +45,20 @@ export default function StatScreen({ navigation }) {
                   left: 15,
                   fontFamily: "Poppins",
                   fontSize: 30,
-                  top: -15,
+                  top: 0,
                }}
             >
-               Stat
+               Stat   
             </Text>
-            <Calendar onChange={onChange} value={date}/>
-               {/* ------------------Calendar------------------- */}
+            <View style={
+                     styles.calendar1
+                  }>
+            <ModalPicker
+                  style={
+                     styles.calendar2
+                  } />
+            </View>
+
             {/* <CalendarStrip
                scrollable
                showDate="false"
@@ -79,6 +86,7 @@ export default function StatScreen({ navigation }) {
             /> */}
 
             {/* ------------------------LineChart----------------------------- */}
+            
             <LineChart
                style={styles.linechart}
                data={{
@@ -320,4 +328,8 @@ const styles = StyleSheet.create({
       left: 10,
       borderRadius: 50,
    },
+   calendar1:
+   {
+      marginRight:-270
+   }
 });
