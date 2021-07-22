@@ -42,7 +42,9 @@ export default function StatScreen({ navigation }) {
                Stat
             </Text>
             <CalendarStrip
+               showMonth="true"
                scrollable
+               showDate="false"
                calendarAnimation={{ type: "sequence", duration: 30 }}
                daySelectionAnimation={{
                   type: "border",

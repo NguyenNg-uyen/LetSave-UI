@@ -51,7 +51,10 @@ export default function CategoryList({ navigation }) {
          });
          ref.current = res.data;
          setCategoriesListFiler(ref.current);
-         return res;
+         const willFocusSubscription = navigation.addListener("focus", () => {
+            getCategoriesList();
+         });
+         return willFocusSubscription;
       };
       getCategoriesList();
    }, []);

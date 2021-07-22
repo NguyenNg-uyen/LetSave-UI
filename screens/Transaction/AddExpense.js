@@ -38,7 +38,7 @@ const getFonts = () => {
 function AddExpense({ navigation, route }) {
    let categoryId, categoryName;
    if (route.params !== undefined) {
-      categoryId = route.params.categoryId;
+      categoryId = route.params.categoryID;
       categoryName = route.params.categoryName;
    }
    const [fontsLoaded, setFontsLoaded] = useState(false);

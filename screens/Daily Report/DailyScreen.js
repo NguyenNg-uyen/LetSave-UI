@@ -223,7 +223,7 @@ const styles = StyleSheet.create({
       alignSelf: "flex-start",
    },
    container: {
-      top: 40,
+      top: 0,
       flex: 1,
       alignItems: "center",
       justifyContent: "center",
