@@ -1,12 +1,14 @@
-import React, { useState } from "react";
+import React, { useState, useCallback } from "react";
 import {
    StyleSheet,
    Text,
    View,
    Button,
+   SafeAreaView,
    Dimensions,
    TouchableOpacity,
 } from "react-native";
+import MonthPicker from 'react-native-month-year-picker';
 import AppLoading from "expo-app-loading";
 import CalendarStrip from "react-native-calendar-strip";
 import * as Font from "expo-font";
@@ -14,6 +16,8 @@ import { LineChart } from "react-native-chart-kit";
 import { PINK } from "../../assets/color";
 import { WHITE } from "../../assets/color";
 import Icon from "react-native-vector-icons/FontAwesome";
+import Calendar from "react-calendar";
+import { FlatList } from "react-native";
 
 const netbalane = 5000.0;
 const inco = 6000.0;
@@ -25,6 +29,11 @@ const getFonts = () => {
    });
 };
 export default function StatScreen({ navigation }) {
+   const [date, setDate] = useState(new Date())
+   const onChange = date =>
+   {
+      setDate(date);
+   }
    const [fontsLoaded, setFontsLoaded] = useState(false);
    // If fonts are loaded successfully
    if (fontsLoaded)
@@ -41,8 +50,9 @@ export default function StatScreen({ navigation }) {
             >
                Stat
             </Text>
-            <CalendarStrip
-               showMonth="true"
+            <Calendar onChange={onChange} value={date}/>
+               {/* ------------------Calendar------------------- */}
+            {/* <CalendarStrip
                scrollable
                showDate="false"
                calendarAnimation={{ type: "sequence", duration: 30 }}
@@ -66,7 +76,9 @@ export default function StatScreen({ navigation }) {
                   top: -15,
                   marginBottom: 5,
                }}
-            />
+            /> */}
+
+            {/* ------------------------LineChart----------------------------- */}
             <LineChart
                style={styles.linechart}
                data={{

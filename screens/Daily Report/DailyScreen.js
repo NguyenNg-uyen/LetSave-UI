@@ -11,9 +11,12 @@ import {
    TouchableOpacity,
 } from "react-native";
 import stat from "../.././assets/images/logo.png";
+import avartar from "../.././assets/images/avatar.png";
 import Icon from "react-native-vector-icons/FontAwesome";
 import AppLoading from "expo-app-loading";
 import * as Font from "expo-font";
+import DateTimePickerModal from "react-native-modal-datetime-picker";
+import moment from "moment";
 const getFonts = () => {
    return Font.loadAsync({
       Frijole: require("../../assets/fonts/Frijole-Regular.ttf"),
@@ -95,6 +98,20 @@ export default function DailyScreen() {
          money={item.money}
       />
    );
+   //=========== Date Picker  =================
+   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
+   const [date, setDate] = useState(moment().format("LL"));
+   const showDatePicker = () => {
+      setDatePickerVisibility(true);
+   };
+   const hideDatePicker = () => {
+      setDatePickerVisibility(false);
+   };
+   const handleConfirm = (date) => {
+      hideDatePicker();
+      const formatDate = moment(date).format("LL");
+      setDate(formatDate);
+   };
    const [fontsLoaded, setFontsLoaded] = useState(false);
    // If fonts are loaded successfully
    if (fontsLoaded)
@@ -104,7 +121,7 @@ export default function DailyScreen() {
             <View name="user" style={styles.profile1}>
                <View name="avatar">
                   <View style={styles.avatarbackground}>
-                     <Image style={styles.image} source={stat} />
+                     <Image style={styles.image} source={avartar} />
                   </View>
                </View>
                <Text
@@ -118,7 +135,7 @@ export default function DailyScreen() {
                   }}
                >
                   {" "}
-                  Hà Huy Thông{" "}
+                  Abbie Wilson{" "}
                </Text>
             </View>
             <View style={{ left: 120, top: 14, left: 60 }}>
@@ -145,23 +162,35 @@ export default function DailyScreen() {
             </View>
             {/* Transaction List */}
             <View style={styles.list}>
+               <View 
+               style={styles.content}>
                <Text
                   style={{
                      fontFamily: "Poppins",
                      color: "#FF3378",
                      fontSize: 20,
-                     left: 15,
-                     top: 10,
+                     marginLeft:15,
+                     marginTop:10,
                   }}
                >
                   Recent Transaction
                </Text>
-               <Icon
-                  name="calendar"
-                  color="#FF3378"
-                  size={20}
-                  style={{ left: 370, top: -20 }}
-               ></Icon>
+               <TouchableOpacity onPress={showDatePicker}>
+                  <Icon
+                     name="calendar"
+                     color="#FF3378"
+                     size={20}
+                     style={{ marginTop:12,marginRight:18}}
+                  ></Icon>
+               </TouchableOpacity>
+               <DateTimePickerModal
+                     value={date}
+                     mode={"date"}
+                     onConfirm={handleConfirm}
+                     onCancel={hideDatePicker}
+                     isVisible={isDatePickerVisible}
+                  />
+                  </View>
                <SafeAreaView style={styles.FlatList}>
                   <FlatList
                      data={DATA}
@@ -209,7 +238,7 @@ const styles = StyleSheet.create({
       left: -10,
    },
    money: {
-      top: -15,
+      marginBottom:15,
       fontSize: 32,
       fontFamily: "Poppins",
       alignSelf: "flex-end",
@@ -219,7 +248,7 @@ const styles = StyleSheet.create({
       fontSize: 15,
       fontFamily: "Poppins",
       left: 0,
-      top: 10,
+      marginTop:10,
       alignSelf: "flex-start",
    },
    container: {
@@ -262,4 +291,8 @@ const styles = StyleSheet.create({
       top: 120,
       right: 130,
    },
+   content:{
+      justifyContent:"space-between",
+      flexDirection:"row",
+   }
 });
