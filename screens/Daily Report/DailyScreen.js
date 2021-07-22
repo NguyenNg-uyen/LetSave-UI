@@ -41,7 +41,15 @@ export default function DailyScreen() {
             }
          })
             .then(res => {
-               setData(res.data);
+               let newlist = res.data.map((item) => {
+                  if (item.type == 'Expense') {
+                     item.amount = -item.amount;
+                  } else if (item.type == 'Income') {
+                     item.amount = '+' + item.amount;
+                  }
+                  return item;
+               });
+               setData(newlist);
             })
             .catch(err => {
                console.log(err);
