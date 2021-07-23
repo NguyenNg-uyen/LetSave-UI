@@ -1,23 +1,25 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
    StyleSheet,
    Text,
    View,
    Button,
+   SafeAreaView,
    Dimensions,
    TouchableOpacity,
+   FlatList,
 } from "react-native";
+import ModalPicker from "./ModalPicker";
 import AppLoading from "expo-app-loading";
-import CalendarStrip from "react-native-calendar-strip";
 import * as Font from "expo-font";
 import { LineChart } from "react-native-chart-kit";
-import { PINK } from "../../assets/color";
-import { WHITE } from "../../assets/color";
+import { LIGHT_GRAY, PINK, WHITE } from "../../assets/color";
 import Icon from "react-native-vector-icons/FontAwesome";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import axios from "axios";
+import apiLib from "../../assets/ApiStore";
 
 const netbalane = 5000.0;
-const inco = 6000.0;
-const expe = 2000.21;
 const getFonts = () => {
    return Font.loadAsync({
       Frijole: require("../../assets/fonts/Frijole-Regular.ttf"),
@@ -25,8 +27,66 @@ const getFonts = () => {
    });
 };
 export default function StatScreen({ navigation }) {
+   // ==================== CallBack function to get month and year of the modal =================
+   const [month, setMonth] = useState(parseInt(new Date().getMonth()) + 1);
+   const [year, setYear] = useState(parseInt(new Date().getFullYear()));
+   const getMonthAndYear = (month, year) => {
+      setMonth(month);
+      setYear(year);
+   };
+   // ==================== Get total balance of Income and Expense of a month =======================
+   const [type, setType] = useState("");
+   const [incomeBalance, setIncomeBalance] = useState(0);
+   const [expenseBalance, setExpenseBalance] = useState(0);
+   useEffect(() => {
+      const getMonthlyBalance = async () => {
+         const username = await AsyncStorage.getItem("username");
+         const password = await AsyncStorage.getItem("password");
+
+         //==================== Get daily transaction ==========================
+         axios({
+            method: "POST",
+            url: apiLib.getMonthlyTransactionByParticularYear,
+            auth: {
+               username: username,
+               password: password,
+            },
+            data: {
+               type: "Income",
+               year: year,
+            },
+         })
+            .then((res) => {
+               setIncomeBalance(parseInt(res.data[0].amount));
+            })
+            .catch((err) => {
+               console.log(err);
+            });
+
+         // Get fullname and avatar
+         axios({
+            method: "POST",
+            url: apiLib.getMonthlyTransactionByParticularYear,
+            auth: {
+               username: username,
+               password: password,
+            },
+            data: {
+               type: "Expense",
+               year: year,
+            },
+         })
+            .then((res) => {
+               setExpenseBalance(parseInt(res.data[0].amount));
+            })
+            .catch((err) => {
+               console.log(err);
+            });
+      };
+      getMonthlyBalance();
+   }, [year]);
    const [fontsLoaded, setFontsLoaded] = useState(false);
-   // If fonts are loaded successfully
+   // ============== If fonts are loaded successfully ==============
    if (fontsLoaded)
       return (
          <View style={styles.container}>
@@ -41,30 +101,18 @@ export default function StatScreen({ navigation }) {
             >
                Stat
             </Text>
-            <CalendarStrip
-               scrollable
-               calendarAnimation={{ type: "sequence", duration: 30 }}
-               daySelectionAnimation={{
-                  type: "border",
-                  borderWidth: 2,
-                  borderHighlightColor: PINK,
-               }}
-               calendarHeaderStyle={{ color: "black" }}
-               calendarColor={"#7743CE"}
-               dateNumberStyle={{ color: "black" }}
-               dateNameStyle={{ color: "black", fontWeight: "bold" }}
-               highlightDateNumberStyle={{ color: PINK }}
-               highlightDateNameStyle={{ color: PINK }}
-               disabledDateNameStyle={{ color: "grey" }}
-               disabledDateNumberStyle={{ color: "grey" }}
-               style={{
-                  height: 80,
-                  width: "100%",
-                  backgroundColor: WHITE,
-                  top: -15,
-                  marginBottom: 5,
-               }}
-            />
+            <View style={styles.calendar1}>
+               <Text style={[{ marginRight: 10 }, styles.line]}>
+                  - ~ - ~ - ~
+               </Text>
+               <ModalPicker sendMonthAndYear={getMonthAndYear} />
+               <Text style={[{ marginLeft: 10 }, styles.line]}>
+                  ~ - ~ - ~ -
+               </Text>
+            </View>
+
+            {/* ------------------------LineChart----------------------------- */}
+
             <LineChart
                style={styles.linechart}
                data={{
@@ -177,13 +225,16 @@ export default function StatScreen({ navigation }) {
                   <Text
                      style={{
                         color: "black",
-                        fontSize: 30,
+                        fontSize: 25,
                         top: 40,
                         left: 10,
                         fontFamily: "Poppins",
                      }}
                   >
-                     ${inco}
+                     $
+                     {incomeBalance
+                        .toString()
+                        .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
                   </Text>
                </TouchableOpacity>
                {/* ====================== Expense button =======================*/}
@@ -217,13 +268,16 @@ export default function StatScreen({ navigation }) {
                   <Text
                      style={{
                         color: "black",
-                        fontSize: 30,
+                        fontSize: 25,
                         top: 40,
                         left: 10,
                         fontFamily: "Poppins",
                      }}
                   >
-                     ${expe}
+                     $
+                     {expenseBalance
+                        .toString()
+                        .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
                   </Text>
                </TouchableOpacity>
             </View>
@@ -256,7 +310,7 @@ const styles = StyleSheet.create({
       justifyContent: "space-between",
       flexDirection: "row",
       top: -5,
-      marginBottom: 50,
+      marginBottom: 70,
    },
    income: {
       backgroundColor: WHITE,
@@ -305,5 +359,17 @@ const styles = StyleSheet.create({
       top: 15,
       left: 10,
       borderRadius: 50,
+   },
+   calendar1: {
+      // width: "100%",
+      display: "flex",
+      flexDirection: "row",
+      marginBottom: 10,
+      // marginLeft: 10,
+   },
+   line: {
+      marginTop: 6,
+      fontSize: 28,
+      color: PINK,
    },
 });

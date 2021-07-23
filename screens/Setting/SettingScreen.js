@@ -118,7 +118,11 @@ function SettingScreen({ navigation }) {
             {/* Horizontal line */}
             <View style={[styles.horizontalline]}></View>
             {/* =========================== UPDATE PROFILE ===================================== */}
-            <TouchableOpacity>
+            <TouchableOpacity
+               onPress={() => {
+                  navigation.navigate("UpdateProfile");
+               }}
+            >
                <View style={{ flexDirection: "row" }}>
                   <Image source={icon_profile} style={styles.icon_style} />
                   <View style={{ flexDirection: "column" }}>

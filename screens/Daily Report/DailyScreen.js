@@ -9,15 +9,18 @@ import {
    SafeAreaView,
    StatusBar,
    TouchableOpacity,
+   Alert,
 } from "react-native";
 import stat from "../.././assets/images/logo.png";
 import Icon from "react-native-vector-icons/FontAwesome";
 import AppLoading from "expo-app-loading";
 import * as Font from "expo-font";
+import logo from "../../assets/images/logo.png";
+import DateTimePickerModal from "react-native-modal-datetime-picker";
+import moment from "moment";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
 import apiLib from "../../assets/ApiStore";
-import logo from "../../assets/images/logo.png";
 const getFonts = () => {
    return Font.loadAsync({
       Frijole: require("../../assets/fonts/Frijole-Regular.ttf"),
@@ -31,12 +34,26 @@ export default function DailyScreen() {
    const [fullname, setFullname] = useState("");
    const [balance, setBalance] = useState(0);
 
+   // ========================== Date picker handler ====================================
+   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
+   const [date, setDate] = useState(moment().format("LL"));
+   const showDatePicker = () => {
+      setDatePickerVisibility(true);
+   };
+   const hideDatePicker = () => {
+      setDatePickerVisibility(false);
+   };
+   const handleConfirm = (date) => {
+      hideDatePicker();
+      const formatDate = moment(date).format("LL");
+      setDate(formatDate);
+   };
    useEffect(() => {
       const getDailyTransactions = async () => {
          const username = await AsyncStorage.getItem("username");
          const password = await AsyncStorage.getItem("password");
 
-         // get daily transaction
+         //==================== Get daily transaction ==========================
          axios({
             method: "GET",
             url: apiLib.getDailyTransactioninCurrentYear,
@@ -48,7 +65,7 @@ export default function DailyScreen() {
             .then((res) => {
                let newlist = res.data.map((item) => {
                   if (item.type == "Expense") {
-                     item.amount = "-" + item.amount;
+                     item.amount = -item.amount;
                   } else if (item.type == "Income") {
                      item.amount = "+" + item.amount;
                   }
@@ -57,7 +74,7 @@ export default function DailyScreen() {
                setData(newlist);
             })
             .catch((err) => {
-               console.error(err);
+               console.log(err);
             });
 
          // Get fullname and avatar
@@ -74,24 +91,24 @@ export default function DailyScreen() {
                setAvatar(res.data.avatar);
             })
             .catch((err) => {
-               console.error(err);
+               console.log(err);
             });
 
          // Get balance
-         // axios({
-         //    method: "GET",
-         //    url: "http://localhost:8080/balances",
-         //    auth: {
-         //       username: username,
-         //       password: password,
-         //    },
-         // })
-         //    .then((res) => {
-         //       setBalance(res.data.total);
+         //    axios({
+         //       method: 'GET',
+         //       url: 'http://localhost:8080/balances',
+         //       auth: {
+         //          username: username,
+         //          password: password
+         //       }
          //    })
-         //    .catch((err) => {
-         //       console.error(err);
-         //    });
+         //       .then(res => {
+         //          setBalance(res.data.total);
+         //       })
+         //       .catch(err => {
+         //          console.log(err);
+         //       });
       };
 
       getDailyTransactions();
@@ -127,9 +144,9 @@ export default function DailyScreen() {
                <Text
                   name="username"
                   style={{
-                     left: 0,
+                     left: -1,
                      top: 10,
-                     fontSize: 14,
+                     fontSize: 20,
                      color: "white",
                      fontFamily: "Poppins",
                   }}
@@ -146,7 +163,7 @@ export default function DailyScreen() {
                      fontFamily: "Poppins",
                   }}
                >
-                  0${/* ${balance} */}
+                  ${balance}
                </Text>
                <Text
                   style={{
@@ -173,12 +190,19 @@ export default function DailyScreen() {
                >
                   Recent Transaction
                </Text>
-               <Icon
-                  name="calendar"
-                  color="#FF3378"
-                  size={20}
+               <TouchableOpacity
+                  onPress={showDatePicker}
                   style={{ left: 370, top: -20 }}
-               ></Icon>
+               >
+                  <Icon name="calendar" color="#FF3378" size={20}></Icon>
+               </TouchableOpacity>
+               <DateTimePickerModal
+                  value={date}
+                  mode={"date"}
+                  onConfirm={handleConfirm}
+                  onCancel={hideDatePicker}
+                  isVisible={isDatePickerVisible}
+               />
                <SafeAreaView style={styles.FlatList}>
                   <FlatList
                      data={data}
@@ -240,7 +264,7 @@ const styles = StyleSheet.create({
       alignSelf: "flex-start",
    },
    container: {
-      top: 40,
+      top: 0,
       flex: 1,
       alignItems: "center",
       justifyContent: "center",

@@ -15,6 +15,7 @@ import ProfileScreen from "../Profile/ProfileScreen";
 import SettingScreen from "../Setting/SettingScreen";
 import CategoryList from "../Setting/CategoryList";
 import AddCategory from "../Setting/AddCategory";
+import UpdateProfile from "../Setting/UpdateProfile";
 function NavigationWrapper() {
    const Stack = createStackNavigator();
    return (
@@ -88,6 +89,11 @@ function NavigationWrapper() {
             <Stack.Screen
                name="AddCategory"
                component={AddCategory}
+               options={{ headerShown: true }}
+            />
+            <Stack.Screen
+               name="UpdateProfile"
+               component={UpdateProfile}
                options={{ headerShown: true }}
             />
          </Stack.Navigator>

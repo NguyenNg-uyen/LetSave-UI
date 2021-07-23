@@ -1,5 +1,5 @@
-// const BaseURL = "http://10.0.2.2:8080";
-const BaseURL = "http://localhost:8080";
+const BaseURL = "http://10.0.2.2:8080";
+// const BaseURL = "http://localhost:8080";
 const apiLib = {
    login: BaseURL + "/login",
    register: BaseURL + "/accounts/register",
