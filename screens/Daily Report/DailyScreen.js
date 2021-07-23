@@ -44,10 +44,37 @@ export default function DailyScreen() {
    const hideDatePicker = () => {
       setDatePickerVisibility(false);
    };
-   const handleConfirm = (datee) => {
+   const handleConfirm = async (datee) => {
       hideDatePicker();
       const formatDate = moment(datee).format("YYYY-MM-DD");
       setDate(formatDate);
+      const username = await AsyncStorage.getItem("username");
+      const password = await AsyncStorage.getItem("password");
+      axios({
+         method: "POST",
+         url: apiLib.getTransactionByParticularDate,
+         auth: {
+            username: username,
+            password: password,
+         },
+         data: {
+            date: formatDate,
+         },
+      })
+         .then((res) => {
+            let newlist = res.data.map((item) => {
+               if (item.type == "Expense") {
+                  item.amount = "- $" + item.amount;
+               } else if (item.type == "Income") {
+                  item.amount = "+ $" + item.amount;
+               }
+               return item;
+            });
+            setData(newlist);
+         })
+         .catch((err) => {
+            console.log(err);
+         });
    };
    useEffect(() => {
       const getDailyTransactions = async () => {
@@ -97,7 +124,7 @@ export default function DailyScreen() {
          // Get balance
          axios({
             method: "GET",
-            url: apiLib.balances,
+            url: apiLib.getBalances,
             auth: {
                username: username,
                password: password,
@@ -141,7 +168,7 @@ export default function DailyScreen() {
                   : [{ color: "#FF3378" }, styles.money]
             }
          >
-            {item.amount}
+            {item.amount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
          </Text>
       </View>
    );
@@ -179,7 +206,7 @@ export default function DailyScreen() {
                      fontFamily: "Poppins",
                   }}
                >
-                  ${balance}
+                  ${balance.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
                </Text>
                <Text
                   style={{
@@ -204,7 +231,7 @@ export default function DailyScreen() {
                      top: 10,
                   }}
                >
-                  Recent Transaction
+                  Daily Transaction
                </Text>
                <TouchableOpacity
                   onPress={showDatePicker}
@@ -267,9 +294,8 @@ const styles = StyleSheet.create({
       fontSize: 25,
       fontFamily: "Poppins",
       alignSelf: "flex-end",
-
       position: "absolute",
-      right: 5,
+      right: 10,
       top: 35,
    },
    service: {

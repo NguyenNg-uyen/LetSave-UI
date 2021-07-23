@@ -16,6 +16,8 @@ import SettingScreen from "../Setting/SettingScreen";
 import CategoryList from "../Setting/CategoryList";
 import AddCategory from "../Setting/AddCategory";
 import UpdateProfile from "../Setting/UpdateProfile";
+import CreateBudgetSreen from "../Budget/CreateBudgetScreen";
+import BudgetSreen from "../Budget/BugetScreen";
 function NavigationWrapper() {
    const Stack = createStackNavigator();
    return (
@@ -69,6 +71,16 @@ function NavigationWrapper() {
             <Stack.Screen
                name="ReportDetail"
                component={ReportDetail}
+               options={{ headerShown: true }}
+            />
+            <Stack.Screen
+               name="CreateBudgetSreen"
+               component={CreateBudgetSreen}
+               options={{ headerShown: true }}
+            />
+            <Stack.Screen
+               name="BudgetSreen"
+               component={BudgetSreen}
                options={{ headerShown: true }}
             />
             <Stack.Screen

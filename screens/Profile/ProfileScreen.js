@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
    StyleSheet,
    View,
@@ -13,7 +13,11 @@ import AppLoading from "expo-app-loading";
 import { MaterialIcons } from "@expo/vector-icons";
 import { TouchableOpacity } from "react-native";
 import SettingScreen from "../Setting/SettingScreen";
-import avatar from "../../assets/images/avatar.png";
+import logo from "../../assets/images/logo.png";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import axios from "axios";
+import apiLib from "../../assets/ApiStore";
+import moment from "moment";
 // Set up letter fonts
 const getFonts = () => {
    return Font.loadAsync({
@@ -25,6 +29,61 @@ const getFonts = () => {
 };
 const ProfileScreen = ({ navigation }) => {
    const [fontsLoaded, setFontsLoaded] = useState(false);
+   //User Data
+   const [data, setData] = useState([]);
+   const [avatar, setAvatar] = useState("");
+   // const [fullname, setFullname] = useState("Undefined");
+   const [balance, setBalance] = useState(0);
+   const [email, setEmail] = useState("");
+   const [phone, setPhone] = useState("");
+   const [birthday, setBirthday] = useState("");
+   const [Username, setUsername] = useState("");
+   //================ GET PROFILE API =================
+   useEffect(() => {
+      const getProfile = async () => {
+         let username = await AsyncStorage.getItem("username");
+         let password = await AsyncStorage.getItem("password");
+         //======  Get profile Info
+         axios({
+            method: "GET",
+            url: apiLib.getProfile,
+            auth: {
+               username: username,
+               password: password,
+            },
+         })
+            .then((res) => {
+               // setFullname(res.data.fullname);
+               setUsername(username);
+               setEmail(res.data.email);
+               if (res.data.birthday != null) {
+                  setBirthday(moment(res.data.birthday).format("LL"));
+               } else {
+                  setBirthday("");
+               }
+               setPhone(res.data.phone);
+            })
+            .catch((err) => {
+               console.log(err);
+            });
+         //=======  Get balance
+         axios({
+            method: "GET",
+            url: apiLib.getBalances,
+            auth: {
+               username: username,
+               password: password,
+            },
+         })
+            .then((res) => {
+               setBalance(res.data.total);
+            })
+            .catch((err) => {
+               console.log(err);
+            });
+      };
+      getProfile();
+   }, []);
    if (fontsLoaded) {
       return (
          <View style={[{ flexDirection: "column" }, styles.container]}>
@@ -50,7 +109,7 @@ const ProfileScreen = ({ navigation }) => {
                <View style={{ flexDirection: "row", marginTop: 15 }}>
                   <Image
                      style={[styles.image, { marginTop: 20 }]}
-                     source={avatar}
+                     source={logo}
                   />
                   <View style={{ flexDirection: "column" }}>
                      <Text
@@ -59,7 +118,7 @@ const ProfileScreen = ({ navigation }) => {
                            { marginTop: 80, marginLeft: 20 },
                         ]}
                      >
-                        Abbie Wilson
+                        {Username}
                      </Text>
                      <Text
                         style={[
@@ -89,7 +148,7 @@ const ProfileScreen = ({ navigation }) => {
                         paddingTop: 5,
                      }}
                   >
-                     $4250.25
+                     ${balance}
                   </Text>
                   <View style={[styles.horizontalline]}></View>
                </View>
@@ -97,11 +156,11 @@ const ProfileScreen = ({ navigation }) => {
             {/* ===========  User information =================*/}
             <View style={[{ flex: 0.9 }, styles.containerInfo]}>
                <Text style={styles.titleInfo}>Email</Text>
-               <Text style={styles.textInfo}>jparker@gmail.com</Text>
+               <Text style={styles.textInfo}>{email}</Text>
                <Text style={styles.titleInfo}>Date of Birth</Text>
-               <Text style={styles.textInfo}>04-19-1992</Text>
+               <Text style={styles.textInfo}>{birthday}</Text>
                <Text style={styles.titleInfo}>Phone</Text>
-               <Text style={styles.textInfo}>0900123345</Text>
+               <Text style={styles.textInfo}>{phone}</Text>
             </View>
          </View>
       );

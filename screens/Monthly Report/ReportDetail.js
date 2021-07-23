@@ -15,6 +15,7 @@ import { ListItem, Avatar } from "react-native-elements";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
 import apiLib from "../../assets/ApiStore";
+import moment from "moment";
 import { decode, encode } from "base-64";
 import cash from "../../assets/images/icon_InsertIncome.png";
 if (!global.btoa) {
@@ -46,6 +47,8 @@ export default function ReportDetail({ props, route }) {
             },
             data: {
                type: route.params.transactionType,
+               month: route.params.month,
+               year: route.params.year,
             },
          })
             .then((res) => {
@@ -106,8 +109,22 @@ export default function ReportDetail({ props, route }) {
                      : [{ backgroundColor: PINK }, styles.titleView]
                }
             >
-               <Text style={styles.monthText}>May 2021</Text>
-               <Text style={styles.totalBalanceText}>$2142,0</Text>
+               <Text style={styles.monthText}>
+                  {moment("" + route.params.month, "MM").format("MMMM") +
+                     " " +
+                     route.params.year}
+               </Text>
+               <Text style={styles.totalBalanceText}>
+                  {route.params.transactionType == "Income"
+                     ? "$" +
+                       route.params.incomeBalance
+                          .toString()
+                          .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                     : "$" +
+                       route.params.expenseBalance
+                          .toString()
+                          .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
+               </Text>
                <View style={styles.line}></View>
                <Image source={coins} style={styles.image} />
             </View>

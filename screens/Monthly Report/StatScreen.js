@@ -9,7 +9,7 @@ import {
    TouchableOpacity,
    FlatList,
 } from "react-native";
-import ModalPicker from "./ModalPicker";
+import ModalPicker from "../ModalPicker";
 import AppLoading from "expo-app-loading";
 import * as Font from "expo-font";
 import { LineChart } from "react-native-chart-kit";
@@ -56,7 +56,13 @@ export default function StatScreen({ navigation }) {
             },
          })
             .then((res) => {
-               setIncomeBalance(parseInt(res.data[0].amount));
+               let result = res.data.find((item) => {
+                  let itemMonth = new Date(item.date).getMonth() + 1;
+                  return itemMonth == month;
+               });
+               result !== undefined
+                  ? setIncomeBalance(parseInt(result.amount))
+                  : setIncomeBalance(0);
             })
             .catch((err) => {
                console.log(err);
@@ -76,17 +82,20 @@ export default function StatScreen({ navigation }) {
             },
          })
             .then((res) => {
-               // let result = res.data.find(item =>{
-               //    let itemMonth = new Date()
-               // })
-               setExpenseBalance(parseInt(res.data[0].amount));
+               let result = res.data.find((item) => {
+                  let itemMonth = new Date(item.date).getMonth() + 1;
+                  return itemMonth == month;
+               });
+               result !== undefined
+                  ? setExpenseBalance(parseInt(result.amount))
+                  : setExpenseBalance(0);
             })
             .catch((err) => {
                console.log(err);
             });
       };
       getMonthlyBalance();
-   }, [year]);
+   }, [year, month]);
    const [fontsLoaded, setFontsLoaded] = useState(false);
    // ============== If fonts are loaded successfully ==============
    if (fontsLoaded)
@@ -202,6 +211,9 @@ export default function StatScreen({ navigation }) {
                   onPress={() => {
                      navigation.navigate("ReportDetail", {
                         transactionType: "Income",
+                        year: year,
+                        month: month,
+                        incomeBalance: incomeBalance,
                      });
                   }}
                >
@@ -245,6 +257,9 @@ export default function StatScreen({ navigation }) {
                   onPress={() => {
                      navigation.navigate("ReportDetail", {
                         transactionType: "Expense",
+                        year: year,
+                        month: month,
+                        expenseBalance: expenseBalance,
                      });
                   }}
                >

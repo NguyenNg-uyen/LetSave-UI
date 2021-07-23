@@ -22,11 +22,7 @@ import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 // Image
 import icon_Income from "../.././assets/images/icon_income.png";
-import icon_Category from "../.././assets/images/icon_category.png";
 import icon_InsertIncome from "../../assets/images/icon_InsertIncome.png";
-// Screen
-import DailyScreen from "../Daily Report/DailyScreen";
-import CategoryList from "../Setting/CategoryList";
 // Font
 import * as Font from "expo-font";
 
