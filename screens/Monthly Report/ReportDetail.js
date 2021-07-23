@@ -16,7 +16,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
 import apiLib from "../../assets/ApiStore";
 import { decode, encode } from "base-64";
-import cash from "../../assets/cash_48px.png";
+import cash from "../../assets/images/icon_InsertIncome.png";
 if (!global.btoa) {
    global.btoa = encode;
 }

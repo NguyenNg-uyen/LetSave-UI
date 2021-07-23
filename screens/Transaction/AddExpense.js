@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 // Library
 import {
    StyleSheet,
@@ -8,6 +8,7 @@ import {
    TouchableOpacity,
    TextInput,
    Button,
+   Alert,
 } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
@@ -16,6 +17,8 @@ import CurrencyInput from "react-native-currency-input";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import { MaterialIcons } from "@expo/vector-icons";
 import moment from "moment";
+import apiLib from "../../assets/ApiStore";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 // Image
 import transactionIMG from "../.././assets/images/AddTransaction01.png";
@@ -28,6 +31,7 @@ import { GREEN, MEDIUM_PINK } from "../.././assets/color";
 import DailyScreen from "../Daily Report/DailyScreen";
 // Font
 import * as Font from "expo-font";
+import axios from "axios";
 const getFonts = () => {
    return Font.loadAsync({
       PoppinsBold: require("../.././assets/fonts/Poppins-Bold.ttf"),
@@ -36,12 +40,19 @@ const getFonts = () => {
    });
 };
 function AddExpense({ navigation, route }) {
-   let categoryId, categoryName;
+   let CategoryId, categoryName, CategoryImg;
    if (route.params !== undefined) {
-      categoryId = route.params.categoryID;
+      CategoryId = route.params.categoryID;
       categoryName = route.params.categoryName;
+      CategoryImg = route.params.categoryImg;
    }
    const [fontsLoaded, setFontsLoaded] = useState(false);
+   const [cateIcon, setCateIcon] = useState("");
+   // if (CategoryImg == null) {
+   //   setCateIcon(icon_Category);
+   // } else {
+   //   setCateIcon(categoryImg);
+   // }
    //=========== Date Picker  =================
    const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
    const [date, setDate] = useState(moment().format("LL"));
@@ -60,6 +71,44 @@ function AddExpense({ navigation, route }) {
    const [amount, setAmount] = React.useState(0);
    const [category, setCategory] = React.useState();
    if (fontsLoaded) {
+      //================ Insert Expense API ======================
+      async function insertExpense() {
+         // Insert data
+         const inputData = {
+            type: "Expense",
+            amount: amount,
+            categoryId: CategoryId,
+            note: "null",
+         };
+         let username = await AsyncStorage.getItem("username");
+         let password = await AsyncStorage.getItem("password");
+         // Check input field not blank
+         if (inputData.amount == null || inputData.categoryId == null) {
+            Alert.alert("Please fill in all fields");
+         } else {
+            const res = await axios({
+               method: "POST",
+               url: apiLib.createTransaction,
+               auth: {
+                  username: username,
+                  password: password,
+               },
+               data: inputData,
+            });
+            if (res.status == 200) {
+               navigation.navigate("CongratsScreen", {
+                  // Pass data to Congrats Screen
+                  type: "Expense",
+                  cate: categoryName,
+                  inDate: date,
+                  inAmount: amount,
+               });
+            } else {
+               Alert.alert("Insert new transaction unsuccessful");
+            }
+         }
+      }
+
       return (
          <View style={[styles.containerDetail]}>
             {/* =================  1st row - Type & Amount ================= */}
@@ -84,7 +133,7 @@ function AddExpense({ navigation, route }) {
                   </Text>
                   <CurrencyInput
                      style={[
-                        { marginLeft: 62, flex: 1, marginRight: 0 },
+                        { marginLeft: 60, flex: 1, marginRight: 10 },
                         styles.text_input,
                      ]}
                      value={amount}
@@ -92,8 +141,8 @@ function AddExpense({ navigation, route }) {
                      prefix="$"
                      delimiter=","
                      separator="."
-                     precision={2}
-                     maxValue="100000"
+                     precision={0}
+                     maxValue="10000000"
                   />
                </View>
             </View>
@@ -180,15 +229,9 @@ function AddExpense({ navigation, route }) {
                   {/* ================= Button Finish  =================*/}
                   <TouchableOpacity
                      style={styles.btn_Finish}
-                     onPress={() =>
-                        navigation.navigate("CongratsScreen", {
-                           // Pass data to Congrats Screen
-                           type: "Expense",
-                           cate: category,
-                           inDate: date,
-                           inAmount: amount,
-                        })
-                     }
+                     onPress={() => {
+                        insertExpense();
+                     }}
                   >
                      <Text
                         style={{
@@ -214,6 +257,7 @@ function AddExpense({ navigation, route }) {
       );
    }
 }
+
 const styles = StyleSheet.create({
    container: {
       // paddingTop: Platform.OS === "android" ? StatusBar.currentHeight : 0,

@@ -8,6 +8,7 @@ import {
    TouchableOpacity,
    TextInput,
    Button,
+   Alert,
 } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
@@ -16,19 +17,19 @@ import CurrencyInput from "react-native-currency-input";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import { MaterialIcons } from "@expo/vector-icons";
 import moment from "moment";
-
+import apiLib from "../../assets/ApiStore";
+import axios from "axios";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 // Image
-import transactionIMG from "../.././assets/images/AddTransaction01.png";
-import icon_Expense from "../.././assets/images/icon_expense.png";
 import icon_Income from "../.././assets/images/icon_income.png";
 import icon_Category from "../.././assets/images/icon_category.png";
-import congratsImg from "../.././assets/images/CongratIMG.png";
-import { GREEN, MEDIUM_PINK } from "../.././assets/color";
+import icon_InsertIncome from "../../assets/images/icon_InsertIncome.png";
 // Screen
 import DailyScreen from "../Daily Report/DailyScreen";
 import CategoryList from "../Setting/CategoryList";
 // Font
 import * as Font from "expo-font";
+
 const getFonts = () => {
    return Font.loadAsync({
       PoppinsBold: require("../.././assets/fonts/Poppins-Bold.ttf"),
@@ -55,8 +56,52 @@ function AddIncome({ navigation }) {
    };
    // =========== Input Data ===========
    const [amount, setAmount] = React.useState(0);
-   const [category, setCategory] = React.useState();
+   const [category, setCategory] = React.useState("");
    if (fontsLoaded) {
+      //================ Insert Income API ======================
+      async function insertIncome() {
+         // Insert data
+         const inputData = {
+            type: "Income",
+            amount: amount,
+            categoryId: 6,
+            note: category, // Category name
+         };
+         let username = await AsyncStorage.getItem("username");
+         let password = await AsyncStorage.getItem("password");
+         // Check input field not blank
+         if (inputData.amount == null || inputData.note == null) {
+            Alert.alert("Please fill in all fields");
+         } else {
+            axios({
+               method: "POST",
+               url: apiLib.createTransaction,
+               auth: {
+                  username: username,
+                  password: password,
+               },
+               data: inputData,
+            })
+               .then((res) => {
+                  if (res.status == 200) {
+                     navigation.navigate("CongratsScreen", {
+                        // Pass data to Congrats Screen
+                        type: "Income",
+                        cate: category,
+                        inDate: date,
+                        inAmount: amount,
+                     });
+                  } else {
+                     Alert.alert("Insert new transaction unsuccessful");
+                  }
+               })
+               .catch((err) => {
+                  console.log(username + password);
+                  console.error(err);
+               });
+         }
+      }
+
       return (
          <View style={[styles.containerDetail]}>
             {/* =================  1st row - Type & Amount ================= */}
@@ -81,16 +126,15 @@ function AddIncome({ navigation }) {
                   </Text>
                   <CurrencyInput
                      style={[
-                        { marginLeft: 62, flex: 1, marginRight: 0 },
+                        { marginLeft: 62, flex: 1, marginRight: 10 },
                         styles.text_input,
                      ]}
                      value={amount}
                      onChangeValue={setAmount}
                      prefix="$"
-                     delimiter=","
                      separator="."
-                     precision={2}
-                     maxValue="100000"
+                     precision={0}
+                     maxValue="10000000"
                   />
                </View>
             </View>
@@ -103,7 +147,7 @@ function AddIncome({ navigation }) {
                }}
             >
                <Image
-                  source={icon_Category}
+                  source={icon_InsertIncome}
                   style={{ width: 46, height: 46 }}
                />
                <View style={{ flexDirection: "column", flex: 1 }}>
@@ -115,7 +159,7 @@ function AddIncome({ navigation }) {
                         styles.text_input,
                         { marginTop: 8, marginLeft: 8 },
                      ]}
-                     placeholder="Select Category"
+                     placeholder="Enter Category"
                      onChangeText={setCategory}
                      value={category}
                   />
@@ -166,15 +210,7 @@ function AddIncome({ navigation }) {
                   {/* ================= Button Finish  =================*/}
                   <TouchableOpacity
                      style={styles.btn_Finish}
-                     onPress={() =>
-                        navigation.navigate("CongratsScreen", {
-                           // Pass data to Congrats Screen
-                           type: "Income",
-                           cate: category,
-                           inDate: date,
-                           inAmount: amount,
-                        })
-                     }
+                     onPress={() => insertIncome()}
                   >
                      <Text
                         style={{

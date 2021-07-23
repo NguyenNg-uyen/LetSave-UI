@@ -145,11 +145,11 @@ const styles = StyleSheet.create({
       // borderBottomWidth: 0.8,
    },
    containerInfo: {
-      top: 10,
       backgroundColor: MEDIUM_PINK,
       borderWidth: 2,
       borderRadius: 15,
       borderColor: "#c2c2c2",
+      paddingBottom: 15,
    },
    image: {
       borderRadius: 50,
@@ -191,6 +191,7 @@ const styles = StyleSheet.create({
       marginTop: 5,
    },
    commandButton: {
+      marginTop: 15,
       borderRadius: 10,
       backgroundColor: PINK,
       alignItems: "center",

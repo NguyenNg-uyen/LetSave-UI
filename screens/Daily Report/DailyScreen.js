@@ -21,6 +21,8 @@ import moment from "moment";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
 import apiLib from "../../assets/ApiStore";
+import { MEDIUM_PINK, LIGHT_GRAY, GREEN, PINK } from "../../assets/color";
+import icon_InsertIncome from "../../assets/images/icon_InsertIncome.png";
 const getFonts = () => {
    return Font.loadAsync({
       Frijole: require("../../assets/fonts/Frijole-Regular.ttf"),
@@ -30,10 +32,9 @@ const getFonts = () => {
 
 export default function DailyScreen() {
    const [data, setData] = useState([]);
-   const [avatar, setAvatar] = useState("");
+   // const [avatar, setAvatar] = useState("");
    const [fullname, setFullname] = useState("");
    const [balance, setBalance] = useState(0);
-
    // ========================== Date picker handler ====================================
    const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
    const [date, setDate] = useState(moment().format("LL"));
@@ -43,9 +44,9 @@ export default function DailyScreen() {
    const hideDatePicker = () => {
       setDatePickerVisibility(false);
    };
-   const handleConfirm = (date) => {
+   const handleConfirm = (datee) => {
       hideDatePicker();
-      const formatDate = moment(date).format("LL");
+      const formatDate = moment(datee).format("YYYY-MM-DD");
       setDate(formatDate);
    };
    useEffect(() => {
@@ -65,9 +66,9 @@ export default function DailyScreen() {
             .then((res) => {
                let newlist = res.data.map((item) => {
                   if (item.type == "Expense") {
-                     item.amount = -item.amount;
+                     item.amount = "- $" + item.amount;
                   } else if (item.type == "Income") {
-                     item.amount = "+" + item.amount;
+                     item.amount = "+ $" + item.amount;
                   }
                   return item;
                });
@@ -88,46 +89,61 @@ export default function DailyScreen() {
          })
             .then((res) => {
                setFullname(res.data.fullname);
-               setAvatar(res.data.avatar);
             })
             .catch((err) => {
                console.log(err);
             });
 
          // Get balance
-         //    axios({
-         //       method: 'GET',
-         //       url: 'http://localhost:8080/balances',
-         //       auth: {
-         //          username: username,
-         //          password: password
-         //       }
-         //    })
-         //       .then(res => {
-         //          setBalance(res.data.total);
-         //       })
-         //       .catch(err => {
-         //          console.log(err);
-         //       });
+         axios({
+            method: "GET",
+            url: apiLib.balances,
+            auth: {
+               username: username,
+               password: password,
+            },
+         })
+            .then((res) => {
+               setBalance(res.data.total);
+            })
+            .catch((err) => {
+               console.log(err);
+            });
       };
-
       getDailyTransactions();
    }, []);
-
-   const Item = ({ image, service, timeline, money }) => (
-      <View style={styles.item}>
-         <Image source={image} style={styles.itemicon} />
-         <Text style={styles.service}>{service + "\n" + timeline}</Text>
-         <Text style={styles.money}>{money}</Text>
-      </View>
-   );
+   // const Item = ({ image, service, timeline, money }) => (
+   //    <View style={styles.item}>
+   //       <Image source={{ uri: image }} style={styles.itemicon} />
+   //       <Text style={styles.service}>{service}</Text>
+   //       <Text style={styles.timeline}>{timeline}</Text>
+   //       <Text style={styles.money}>{money}</Text>
+   //    </View>
+   // );
    const renderItem = ({ item }) => (
-      <Item
-         image={item.categoryImage}
-         service={item.type}
-         timeline={item.date}
-         money={item.amount}
-      />
+      <View style={styles.item}>
+         <Image
+            source={
+               item.type == "Expense"
+                  ? { uri: item.categoryImage }
+                  : icon_InsertIncome
+            }
+            style={styles.itemicon}
+         />
+         <Text style={styles.service}>
+            {item.type == "Expense" ? item.categoryName : item.note}
+         </Text>
+         <Text style={styles.timeline}>{item.date}</Text>
+         <Text
+            style={
+               item.type == "Income"
+                  ? [{ color: GREEN }, styles.money]
+                  : [{ color: "#FF3378" }, styles.money]
+            }
+         >
+            {item.amount}
+         </Text>
+      </View>
    );
    const [fontsLoaded, setFontsLoaded] = useState(false);
    // If fonts are loaded successfully
@@ -207,7 +223,7 @@ export default function DailyScreen() {
                   <FlatList
                      data={data}
                      renderItem={renderItem}
-                     keyExtractor={(item) => item.id}
+                     keyExtractor={(item, index) => index.toString()}
                   />
                </SafeAreaView>
             </View>
@@ -237,24 +253,24 @@ const styles = StyleSheet.create({
       borderWidth: 0.5,
       borderColor: "#FF3378",
       flexDirection: "row",
-      shadowRadius: 20,
-      shadowColor: "#000",
-      shadowOffset: { width: 0, height: 10 },
-      shadowOpacity: 0.3,
+      elevation: 17,
+      position: "relative",
    },
    itemicon: {
-      backgroundColor: "black",
+      backgroundColor: MEDIUM_PINK,
       borderRadius: 54,
-      height: 85,
-      width: 85,
+      height: 75,
+      width: 75,
       left: -10,
    },
    money: {
-      top: -15,
-      fontSize: 32,
+      fontSize: 25,
       fontFamily: "Poppins",
       alignSelf: "flex-end",
-      color: "#FF3378",
+
+      position: "absolute",
+      right: 5,
+      top: 35,
    },
    service: {
       fontSize: 15,
@@ -302,5 +318,13 @@ const styles = StyleSheet.create({
       width: 110,
       top: 120,
       right: 130,
+   },
+   timeline: {
+      fontFamily: "Poppins",
+      fontSize: 15,
+      position: "absolute",
+      top: 55,
+      left: 90,
+      color: LIGHT_GRAY,
    },
 });

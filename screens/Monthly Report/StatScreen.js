@@ -35,7 +35,6 @@ export default function StatScreen({ navigation }) {
       setYear(year);
    };
    // ==================== Get total balance of Income and Expense of a month =======================
-   const [type, setType] = useState("");
    const [incomeBalance, setIncomeBalance] = useState(0);
    const [expenseBalance, setExpenseBalance] = useState(0);
    useEffect(() => {
@@ -77,6 +76,9 @@ export default function StatScreen({ navigation }) {
             },
          })
             .then((res) => {
+               // let result = res.data.find(item =>{
+               //    let itemMonth = new Date()
+               // })
                setExpenseBalance(parseInt(res.data[0].amount));
             })
             .catch((err) => {

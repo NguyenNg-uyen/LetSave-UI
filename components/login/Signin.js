@@ -78,8 +78,8 @@ export default function Signin(props) {
                }
             })
             .catch((error) => {
-               // Alert.alert("Wrong username or password!");
-               console.error(error);
+               Alert.alert("Wrong username or password!");
+               // console.error(error);
             });
       };
       return (

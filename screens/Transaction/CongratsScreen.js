@@ -89,7 +89,7 @@ function CongratsScreen({ route, navigation }) {
                   {/* Link to daily transaction  */}
                   <TouchableOpacity
                      style={styles.btn_Finish2}
-                     onPress={() => navigation.navigate("Home")}
+                     onPress={() => navigation.push("Home")}
                   >
                      <Text
                         style={{
