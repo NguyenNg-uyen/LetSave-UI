@@ -51,9 +51,12 @@ export default function BudgetSreen({ navigation }) {
             setBudgetList(res.data);
          });
       };
-
       getBudgets();
-   }, [month, year]);
+      const willFocusSubscription = navigation.addListener("focus", () => {
+         getBudgets();
+      });
+      return willFocusSubscription;
+   }, [month]);
    const Item = ({ image, service, money2, money, percent, percentnumber }) => (
       <View style={styles.item}>
          <Image source={{ uri: image }} style={styles.itemicon} />
@@ -70,6 +73,7 @@ export default function BudgetSreen({ navigation }) {
             progress={percentnumber}
             width={338}
             height={10}
+            color={PINK}
          />
       </View>
    );
@@ -99,10 +103,8 @@ export default function BudgetSreen({ navigation }) {
 
                <TouchableOpacity
                   onPress={() => {
-                     Alert.alert("OK");
-                     // navigation.navigate("CreateBudgetScreen");
+                     navigation.navigate("CreateBudgetScreen");
                   }}
-                  style={{ backgroundColor: "black" }}
                >
                   <MaterialIcons name="queue" size={40} />
                </TouchableOpacity>
@@ -215,6 +217,7 @@ const styles = StyleSheet.create({
       position: "absolute",
       bottom: 15,
       left: 20,
+      color: PINK,
    },
    calendar1: {
       // width: "100%",

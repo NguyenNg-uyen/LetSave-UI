@@ -9,19 +9,22 @@ import {
    FlatList,
    Image,
    TextInput,
+   Alert,
+   ToastAndroid,
 } from "react-native";
 import AppLoading from "expo-app-loading";
 import * as Font from "expo-font";
 import Icon from "react-native-vector-icons/FontAwesome";
 import { LIGHT_GRAY, PINK, WHITE } from "../../assets/color";
-import DateTimePickerModal from "react-native-modal-datetime-picker";
-import moment from "moment";
+import ModalPicker from "../ModalPicker";
 import payment from "../../assets/payment.png";
 import moneypack from "../../assets/money.png";
 import calendar from "../../assets/calendar.png";
 import catego from "../../assets/category.png";
 import createBudget from "../../assets/createownBudget.png";
-
+import apiLib from "../../assets/ApiStore";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import axios from "axios";
 const getFonts = () => {
    return Font.loadAsync({
       Frijole: require("../../assets/fonts/Frijole-Regular.ttf"),
@@ -29,52 +32,56 @@ const getFonts = () => {
       PoppinsReg: require("../.././assets/fonts/Poppins-Regular.ttf"),
    });
 };
-export default function CreateBudgetSreen({ navigation, route }) {
-   const [text, onChangeText] = React.useState("Useless Text");
+export default function CreateBudgetScreen({ navigation, route }) {
+   const [budgetName, setBudgetName] = useState("");
+   const [amount, setAmount] = React.useState(0);
+   const [month, setMonth] = useState(parseInt(new Date().getMonth()) + 1);
+   const [year, setYear] = useState(parseInt(new Date().getFullYear()));
+   const getMonthAndYear = (month, year) => {
+      setMonth(month);
+      setYear(year);
+   };
    const [fontsLoaded, setFontsLoaded] = useState(false);
    let categoryId, categoryName;
-   // if (route.params !== undefined) {
-   //    categoryId = route.params.categoryID;
-   //    categoryName = route.params.categoryName;
-   // }
+   if (route.params !== undefined) {
+      categoryId = route.params.categoryID;
+      categoryName = route.params.categoryName;
+   }
+   async function addBudget() {
+      // Insert data
+      const inputData = {
+         name: budgetName,
+         amount: amount,
+         categoryId: categoryId,
+         date: year + "-" + month,
+      };
+      let username = await AsyncStorage.getItem("username");
+      let password = await AsyncStorage.getItem("password");
+      // Check input field not blank
+      if (inputData.amount == null || inputData.categoryId == null) {
+         Alert.alert("Please fill in all fields");
+      } else {
+         const res = await axios({
+            method: "POST",
+            url: apiLib.createBudget,
+            auth: {
+               username: username,
+               password: password,
+            },
+            data: inputData,
+         });
+         if (res.status == 200) {
+            ToastAndroid.show("Add budget successfully", ToastAndroid.SHORT);
+            navigation.goBack();
+         } else {
+            Alert.alert("Insert new transaction unsuccessful");
+         }
+      }
+   }
    //=========== Date Picker  =================
-   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
-   const [date, setDate] = useState(moment().format("LL"));
-   const showDatePicker = () => {
-      setDatePickerVisibility(true);
-   };
-   const hideDatePicker = () => {
-      setDatePickerVisibility(false);
-   };
-   const handleConfirm = (date) => {
-      hideDatePicker();
-      const formatDate = moment(date).format("LL");
-      setDate(formatDate);
-   };
    if (fontsLoaded)
       return (
          <View style={styles.container}>
-            <View style={styles.header}>
-               <TouchableOpacity onPress={() => {}}>
-                  <Icon
-                     name="chevron-left"
-                     size={20}
-                     style={{
-                        marginLeft: 10,
-                     }}
-                  />
-               </TouchableOpacity>
-               <Text
-                  style={{
-                     fontFamily: "Poppins",
-                     fontSize: 20,
-                     marginLeft: 110,
-                     marginTop: 10,
-                  }}
-               >
-                  CreateBudget
-               </Text>
-            </View>
             {/*------------------ Notification-------------- */}
             <View style={[styles.notification]}>
                <Text
@@ -93,7 +100,7 @@ export default function CreateBudgetSreen({ navigation, route }) {
                         width: 30,
                      }}
                   />
-                  CREATE OWN BUDGET
+                  Create Own Budget
                </Text>
             </View>
             <SafeAreaView style={styles.containerInfo}>
@@ -106,7 +113,7 @@ export default function CreateBudgetSreen({ navigation, route }) {
                   />
                   <TextInput
                      style={styles.input}
-                     onChangeText={onChangeText}
+                     onChangeText={setBudgetName}
                      placeholder={"Enter Budget"}
                   />
                </View>
@@ -119,8 +126,13 @@ export default function CreateBudgetSreen({ navigation, route }) {
                   />
                   <TextInput
                      style={styles.input}
-                     onChangeText={onChangeText}
+                     onChangeText={setAmount}
                      placeholder={"Enter Money Amount"}
+                     prefix="$"
+                     delimiter=","
+                     separator="."
+                     precision={0}
+                     maxValue="10000000"
                   />
                </View>
                <View style={styles.infoElement}>
@@ -131,27 +143,13 @@ export default function CreateBudgetSreen({ navigation, route }) {
                         marginLeft: -90,
                         height: 35,
                         width: 30,
+                        marginRight: 65,
                      }}
                      source={calendar}
                   />
-                  <TouchableOpacity
-                     onPress={showDatePicker}
-                     style={{
-                        marginLeft: 100,
-                        marginTop: 20,
-                     }}
-                  >
-                     <Text style={[styles.text_input]}>
-                        {date.toLocaleString()}
-                     </Text>
-                     <DateTimePickerModal
-                        value={date}
-                        mode={"date"}
-                        onConfirm={handleConfirm}
-                        onCancel={hideDatePicker}
-                        isVisible={isDatePickerVisible}
-                     />
-                  </TouchableOpacity>
+                  {/* <View style={styles.calendar}> */}
+                  <ModalPicker sendMonthAndYear={getMonthAndYear} />
+                  {/* </View> */}
                </View>
                <View
                   style={
@@ -164,64 +162,42 @@ export default function CreateBudgetSreen({ navigation, route }) {
                   }
                >
                   <TouchableOpacity
-                     onPress={() => navigation.navigate("CategoryChoice")}
+                     onPress={() => navigation.navigate("BudgetCategoryChoice")}
                   >
                      <Image source={catego} style={{ width: 30, height: 25 }} />
                   </TouchableOpacity>
                   <View style={{ flexDirection: "column", flex: 1 }}>
                      <Text
                         style={[
-                           { marginLeft: 85, fontSize: 15, marginTop: 0 },
+                           { marginLeft: 85, fontSize: 20, marginTop: 0 },
                            styles.text_label,
                         ]}
                      >
-                        Choose Category
+                        {categoryName !== undefined
+                           ? categoryName
+                           : "Choose Category"}
                      </Text>
-                     <Text
-                        style={{
-                           marginLeft: 10,
-                           fontSize: 25,
-                           fontFamily: "Poppins",
-                        }}
-                     >
-                        {categoryName !== undefined ? categoryName : ""}
-                     </Text>
-                     {/* <Text>{route.params.cateName}</Text> */}
-                     {/* <TextInput
-                    style={[styles.text_input, { marginTop: 8, marginLeft: 8 }]}
-                    placeholder={route.params.cateName}
-                    onChangeText={setCategory}
-                    value={category}
-              /> */}
                   </View>
                </View>
 
                {/* button submit */}
-               <View>
-                  <TouchableOpacity
-                     style={styles.commandButton}
-                     onPress={() => {}}
+
+               <TouchableOpacity
+                  style={styles.btnAdd}
+                  onPress={() => {
+                     addBudget();
+                  }}
+               >
+                  <Text
+                     style={{
+                        color: WHITE,
+                        fontFamily: "Poppins",
+                        fontSize: 17,
+                     }}
                   >
-                     <Text
-                        style={{
-                           borderWidth: 1,
-                           borderColor: PINK,
-                           marginTop: 50,
-                           height: 32,
-                           width: 90,
-                           fontSize: 20,
-                           borderRadius: 10,
-                           color: WHITE,
-                           backgroundColor: PINK,
-                           fontFamily: "Poppins",
-                           textAlign: "center",
-                           justifyContent: "center",
-                        }}
-                     >
-                        Done
-                     </Text>
-                  </TouchableOpacity>
-               </View>
+                     Done
+                  </Text>
+               </TouchableOpacity>
             </SafeAreaView>
          </View>
       );
@@ -313,7 +289,7 @@ const styles = StyleSheet.create({
       height: 75,
       backgroundColor: PINK,
       borderRadius: 22,
-      marginTop: 20,
+      marginTop: 60,
       marginBottom: 30,
       marginLeft: 25,
       padding: 15,
@@ -321,4 +297,18 @@ const styles = StyleSheet.create({
       position: "relative",
       marginHorizontal: 4,
    },
+   btnAdd: {
+      borderWidth: 1,
+      borderColor: PINK,
+      marginTop: 40,
+      height: 45,
+      width: 120,
+      fontSize: 20,
+      borderRadius: 10,
+      textAlign: "center",
+      justifyContent: "center",
+      alignItems: "center",
+      backgroundColor: PINK,
+   },
+   calendar: { marginLeft: 10 },
 });

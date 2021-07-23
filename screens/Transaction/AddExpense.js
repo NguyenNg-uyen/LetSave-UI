@@ -69,7 +69,6 @@ function AddExpense({ navigation, route }) {
    };
    // =========== Input Data ===========
    const [amount, setAmount] = React.useState(0);
-   const [category, setCategory] = React.useState();
    if (fontsLoaded) {
       //================ Insert Expense API ======================
       async function insertExpense() {
