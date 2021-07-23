@@ -53,7 +53,7 @@ export default function BudgetSreen({ navigation, route }) {
                 <View style={styles.header}>
                     <TouchableOpacity 
                     onPress={() => { }}
-                    >
+                >
                     <Icon
                         name="chevron-left"
                         size={20}

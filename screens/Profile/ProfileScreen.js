@@ -120,7 +120,7 @@ const styles = StyleSheet.create({
    container: {
       flex: 1,
       width: "auto",
-      backgroundColor: "DFD7D7",
+      backgroundColor: WHITE,
    },
    container1: {
       flex: 1,
@@ -129,8 +129,8 @@ const styles = StyleSheet.create({
       // borderBottomStartRadius: 8,
       // borderBottomWidth: 0.8,
       borderWidth: 2,
-      borderBottomLeftRadius: 35,
-      borderBottomRightRadius: 35,
+      borderBottomLeftRadius: 15,
+      borderBottomRightRadius: 15,
       borderColor: "#c2c2c2",
       shadowColor: "#000",
       shadowOffset: {
