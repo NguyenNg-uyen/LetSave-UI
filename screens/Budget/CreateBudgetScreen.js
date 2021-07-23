@@ -51,6 +51,9 @@ export default function BudgetSreen({ navigation, route }) {
         return (
             <View style={styles.container}>
                 <View style={styles.header}>
+                    <TouchableOpacity 
+                    onPress={() => { }}
+                    >
                     <Icon
                         name="chevron-left"
                         size={20}
@@ -58,6 +61,7 @@ export default function BudgetSreen({ navigation, route }) {
                             marginLeft: 10,
                         }}
                     />
+                    </TouchableOpacity>
                     <Text
                         style={{
                             fontFamily: "Poppins",
