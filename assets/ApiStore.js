@@ -15,5 +15,6 @@ const apiLib = {
   updateTransaction: BaseURL + "/transactions/",
   getTransactionbyID: BaseURL + "/transactions/",
   createBudget: BaseURL + "/budgets",
+  getBalance: BaseURL + "/balances",
 };
 export default apiLib;
