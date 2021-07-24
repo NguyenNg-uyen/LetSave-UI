@@ -113,13 +113,9 @@ export default function StatScreen({ navigation }) {
                Stat
             </Text>
             <View style={styles.calendar1}>
-               <Text style={[{ marginRight: 10 }, styles.line]}>
-                  - ~ - ~ - ~
-               </Text>
+               <Text style={[{ marginRight: 10 }, styles.line]}>---------</Text>
                <ModalPicker sendMonthAndYear={getMonthAndYear} />
-               <Text style={[{ marginLeft: 10 }, styles.line]}>
-                  ~ - ~ - ~ -
-               </Text>
+               <Text style={[{ marginLeft: 10 }, styles.line]}>---------</Text>
             </View>
 
             {/* ------------------------LineChart----------------------------- */}
@@ -341,7 +337,7 @@ const styles = StyleSheet.create({
       },
       shadowOpacity: 0.46,
       shadowRadius: 11.14,
-      elevation: 17,
+      elevation: 30,
    },
    expense: {
       backgroundColor: WHITE,

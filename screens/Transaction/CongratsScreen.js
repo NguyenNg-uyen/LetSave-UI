@@ -76,7 +76,13 @@ function CongratsScreen({ route, navigation }) {
                {/* Horizontal line */}
                <View style={styles.horizontalline}></View>
                {/*  Amount, finish button */}
-               <View style={{ flexDirection: "row", marginTop: 30 }}>
+               <View
+                  style={{
+                     flexDirection: "row",
+                     marginTop: 30,
+                     position: "relative",
+                  }}
+               >
                   <View style={{ flexDirection: "column" }}>
                      <Text style={{ fontSize: 20, fontFamily: "PoppinsReg" }}>
                         Amount
@@ -251,10 +257,12 @@ const styles = StyleSheet.create({
       width: 110,
       height: 55,
       borderColor: "#FF3378",
-      marginLeft: 100,
       borderRadius: 18,
       borderWidth: 1,
-      marginTop: 15,
+      position: "absolute",
+      right: 15,
+      top: 15,
+      backgroundColor: "white",
    },
 });
 export default CongratsScreen;

@@ -124,7 +124,7 @@ function NavigationWrapper() {
             <Stack.Screen
                name="ChangePasswordSuccess"
                component={ChangePasswordSuccess}
-               options={{ headerShown: true }}
+               options={{ headerShown: false }}
             />
          </Stack.Navigator>
       </NavigationContainer>

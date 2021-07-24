@@ -10,15 +10,14 @@ import {
    BackHandler,
    Alert,
 } from "react-native";
-import { Card } from "react-native-shadow-cards";
 import { WHITE, MEDIUM_PINK, PINK, GRAY } from "../../assets/color";
 import logo from "../../assets/images/logo.png";
 import * as Font from "expo-font";
 import AppLoading from "expo-app-loading";
-import { NavigationContainer } from "@react-navigation/native";
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
 import Signin from "../../components/login/Signin";
 import Signup from "../../components/login/Signup";
+import wave from "../../assets/images/Wave.png";
 // Set up letter fonts
 const getFonts = () => {
    return Font.loadAsync({
@@ -64,6 +63,9 @@ export default function Login({ navigation }) {
                </View>
             </ScrollView>
             <View style={{ ...styles.circle, right: -130, top: -100 }}></View>
+            <View style={styles.wave}>
+               <Image source={wave} />
+            </View>
          </KeyboardAvoidingView>
       );
    // In case fonts are not loaded successfully
@@ -101,7 +103,7 @@ const styles = StyleSheet.create({
       backgroundColor: WHITE,
       borderRadius: 30,
       overflow: "hidden",
-      opacity: 20,
+      elevation: 2,
    },
    circle: {
       backgroundColor: "#ffffff",
@@ -109,5 +111,11 @@ const styles = StyleSheet.create({
       width: 200,
       height: 200,
       borderRadius: 100,
+   },
+   wave: {
+      position: "absolute",
+      bottom: -20,
+      elevation: 1,
+      zIndex: -1,
    },
 });

@@ -83,6 +83,10 @@ const ProfileScreen = ({ navigation }) => {
             });
       };
       getProfile();
+      const willFocusSubscription = navigation.addListener("focus", () => {
+         getProfile();
+      });
+      return willFocusSubscription;
    }, []);
    if (fontsLoaded) {
       return (

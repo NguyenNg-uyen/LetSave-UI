@@ -97,7 +97,7 @@ const UpdateProfile = ({ navigation }) => {
       })
          .then((res) => {
             if (res.status == 200) {
-               navigation.push("Home");
+               navigation.goBack();
             } else {
                Alert.alert("Update unsuccess");
             }

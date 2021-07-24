@@ -26,26 +26,34 @@ export default function Signin() {
    const [isSelected, setSelection] = useState(false);
    const [mail, setMail] = useState("");
    const [pass, setPass] = useState("");
+   const [rePass, setRePass] = useState("");
    // If fonts are loaded successfully
    if (fontsLoaded) {
       {
          /*--------------------- Call API function ---------------------*/
       }
       const callApi = async () => {
-         await axios({
-            method: "post",
-            url: apiLib.register,
-            data: {
-               username: mail,
-               password: pass,
-            },
-         })
-            .then((res) => {
-               if (res.status === 200) Alert.alert("Sign up sucessfully");
+         if (pass != rePass) {
+            Alert.alert("Password and re-password are not the same.");
+         } else {
+            axios({
+               method: "post",
+               url: apiLib.register,
+               data: {
+                  username: mail,
+                  password: pass,
+               },
             })
-            .catch((error) => {
-               console.error(JSON.stringify(error));
-            });
+               .then((res) => {
+                  if (res.status === 200) Alert.alert("Sign up sucessfully");
+                  setMail("");
+                  setPass("");
+                  setRePass("");
+               })
+               .catch((error) => {
+                  console.error(JSON.stringify(error));
+               });
+         }
       };
       {
          /*--------------------- Validation function ---------------------*/
@@ -53,7 +61,7 @@ export default function Signin() {
       const validate = () => {
          const emailRegex = /^[A-Z][a-zA-Z]{3,}(?: [A-Z][a-zA-Z]*){0,2}$/;
          if (!emailRegex.test(mail)) {
-            Alert.alert("Email is not valid");
+            Alert.alert("User name is not valid");
             setMail("");
          }
       };
@@ -63,10 +71,10 @@ export default function Signin() {
             <ScrollView style={styles.container}>
                <View style={styles.box}>
                   <View style={styles.emailView}>
-                     <Text style={styles.email}>Email</Text>
+                     <Text style={styles.email}>User name</Text>
                      <TextInput
                         style={styles.textInput}
-                        placeholder="name@domain.com"
+                        placeholder="Input user name"
                         onChangeText={(val) => setMail(val)}
                         value={mail}
                         onBlur={validate}
@@ -80,6 +88,7 @@ export default function Signin() {
                         placeholder="**************"
                         onChangeText={(val) => setPass(val)}
                         secureTextEntry={true}
+                        value={pass}
                      />
                   </View>
                   {/*--------------------- Re-Password Field ---------------------*/}
@@ -88,7 +97,9 @@ export default function Signin() {
                      <TextInput
                         style={styles.textInput}
                         placeholder="**************"
+                        onChangeText={(val) => setRePass(val)}
                         secureTextEntry={true}
+                        value={rePass}
                      />
                   </View>
                   {/*--------------------- Checkbox Field ---------------------*/}
@@ -119,6 +130,7 @@ export default function Signin() {
                   >
                      <Text style={styles.textSignUp}>Sign Up</Text>
                   </TouchableOpacity>
+                  <View style={{ height: 100 }}></View>
                </View>
             </ScrollView>
          </KeyboardAvoidingView>

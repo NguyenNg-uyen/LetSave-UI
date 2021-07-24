@@ -9,6 +9,7 @@ import {
    FlatList,
    Image,
    TextInput,
+   Alert,
 } from "react-native";
 import AppLoading from "expo-app-loading";
 import * as Font from "expo-font";
@@ -16,6 +17,9 @@ import Icon from "react-native-vector-icons/FontAwesome";
 import { LIGHT_GRAY, PINK, WHITE } from "../../assets/color";
 import { LinearGradient } from "expo-linear-gradient";
 import { fontSize, width } from "styled-system";
+import apiLib from "../../assets/ApiStore";
+import axios from "axios";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 const getFonts = () => {
    return Font.loadAsync({
       Frijole: require("../../assets/fonts/Frijole-Regular.ttf"),
@@ -24,12 +28,49 @@ const getFonts = () => {
    });
 };
 export default function ChangePassword({ navigation }) {
-   const [currentPassword, onChangecurrentPassword] =
-      React.useState("Useless Text");
-   const [newPassword, onChangenewPassword] = React.useState("Useless Text");
-   const [confirmPassword, onChangeconfirmPassword] =
-      React.useState("Useless Text");
+   //===== DATA ===
+   const [currentPassword, onChangecurrentPassword] = React.useState("");
+   const [newPassword, onChangenewPassword] = React.useState("");
+   const [confirmPassword, onChangeconfirmPassword] = React.useState("");
    const [fontsLoaded, setFontsLoaded] = useState(false);
+   //=== Validate Pass ===
+   const validate = () => {
+      if (confirmPassword != newPassword) {
+         Alert.alert("Password do not match");
+         onChangeconfirmPassword("");
+      }
+   };
+   //=========== CHANGE PASS API ================
+   const updatePass = async () => {
+      let username = await AsyncStorage.getItem("username");
+      let password = await AsyncStorage.getItem("password");
+      axios({
+         method: "PUT",
+         url: apiLib.changePassword,
+         auth: {
+            username: username,
+            password: password,
+         },
+         data: {
+            oldPassword: currentPassword,
+            newPassword: newPassword,
+         },
+      })
+         .then((res) => {
+            if (res.status == 200) {
+               navigation.navigate("ChangePasswordSuccess");
+            } else {
+               Alert.alert(
+                  "Change Password not success",
+                  "Please check your old password"
+               );
+            }
+         })
+         .catch((err) => {
+            console.log(err);
+         });
+   };
+   //====
    if (fontsLoaded)
       return (
          <View style={styles.container}>
@@ -64,15 +105,16 @@ export default function ChangePassword({ navigation }) {
                <Text style={styles.titletext}>Confirm New Password</Text>
                <TextInput
                   style={styles.textinput}
-                  onChangeText={onChangeconfirmPassword}
+                  onChangeText={(val) => onChangeconfirmPassword(val)}
                   value={confirmPassword}
+                  onBlur={validate}
                   secureTextEntry
                />
-
+               {/* ========= Button Submit =========*/}
                <TouchableOpacity
                   style={styles.buttonSubbmit}
                   onPress={() => {
-                     navigation.navigate("ChangePasswordSuccess");
+                     updatePass();
                   }}
                >
                   <LinearGradient

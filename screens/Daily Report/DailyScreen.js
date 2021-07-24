@@ -33,7 +33,7 @@ const getFonts = () => {
 export default function DailyScreen() {
    const [data, setData] = useState([]);
    // const [avatar, setAvatar] = useState("");
-   const [fullname, setFullname] = useState("");
+   const [userName, setUsername] = useState("");
    const [balance, setBalance] = useState(0);
    // ========================== Date picker handler ====================================
    const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
@@ -50,6 +50,7 @@ export default function DailyScreen() {
       setDate(formatDate);
       const username = await AsyncStorage.getItem("username");
       const password = await AsyncStorage.getItem("password");
+
       axios({
          method: "POST",
          url: apiLib.getTransactionByParticularDate,
@@ -80,7 +81,7 @@ export default function DailyScreen() {
       const getDailyTransactions = async () => {
          const username = await AsyncStorage.getItem("username");
          const password = await AsyncStorage.getItem("password");
-
+         setUsername(username);
          //==================== Get daily transaction ==========================
          axios({
             method: "GET",
@@ -100,22 +101,6 @@ export default function DailyScreen() {
                   return item;
                });
                setData(newlist);
-            })
-            .catch((err) => {
-               console.log(err);
-            });
-
-         // Get fullname and avatar
-         axios({
-            method: "GET",
-            url: apiLib.getProfile,
-            auth: {
-               username: username,
-               password: password,
-            },
-         })
-            .then((res) => {
-               setFullname(res.data.fullname);
             })
             .catch((err) => {
                console.log(err);
@@ -195,7 +180,7 @@ export default function DailyScreen() {
                   }}
                >
                   {" "}
-                  {fullname}{" "}
+                  {userName}{" "}
                </Text>
             </View>
             <View style={{ left: 120, top: 14, left: 60 }}>

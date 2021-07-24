@@ -5,9 +5,7 @@ import {
    View,
    Image,
    TouchableOpacity,
-   TextInput,
-   Button,
-   FlatList,
+   ScrollView,
    Switch,
 } from "react-native";
 import * as Font from "expo-font";
@@ -20,6 +18,7 @@ import icon_noti from "../.././assets/images/icon_noti.png";
 import icon_aboutApp from "../.././assets/images/icon_aboutApp.png";
 import icon_logOut from "../.././assets/images/icon_logOut.png";
 import icon_pass from "../.././assets/images/icon_pass.png";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import {
    GREEN,
    MEDIUM_PINK,
@@ -28,6 +27,8 @@ import {
    LIGHT_GRAY,
    GRAY,
 } from "../.././assets/color";
+import apiLib from "../../assets/ApiStore";
+import axios from "axios";
 const getFonts = () => {
    return Font.loadAsync({
       PoppinsRegular: require("../../assets/fonts/Poppins-Regular.ttf"),
@@ -40,9 +41,22 @@ function SettingScreen({ navigation }) {
    const [fontsLoaded, setFontsLoaded] = useState(false);
    const [isEnabled, setIsEnabled] = useState(false);
    const toggleSwitch = () => setIsEnabled((previousState) => !previousState);
+   const logout = async () => {
+      AsyncStorage.clear();
+      axios({
+         method: "POST",
+         url: apiLib.logOut,
+      })
+         .then((res) => {
+            if (res.status == 200) navigation.navigate("Login");
+         })
+         .catch((error) => {
+            console.error(JSON.stringify(error));
+         });
+   };
    if (fontsLoaded) {
       return (
-         <View style={{ flexDirection: "column" }}>
+         <ScrollView style={{ flexDirection: "column" }}>
             <View style={styles.notification}>
                <Text
                   style={{
@@ -156,7 +170,7 @@ function SettingScreen({ navigation }) {
             {/* =========================== LOG OUT ===================================== */}
             <TouchableOpacity
                onPress={() => {
-                  navigation.navigate("Login");
+                  logout();
                }}
             >
                <View style={{ flexDirection: "row" }}>
@@ -167,7 +181,7 @@ function SettingScreen({ navigation }) {
                   </View>
                </View>
             </TouchableOpacity>
-         </View>
+         </ScrollView>
       );
    } else {
       return (

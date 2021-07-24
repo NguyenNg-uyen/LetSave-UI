@@ -19,5 +19,6 @@ const apiLib = {
    createBudget: BaseURL + "/budgets",
    getBudgetByMonth: BaseURL + "/budgets/month",
    getBalances: BaseURL + "/balances",
+   logOut: BaseURL + "/logoutt",
 };
 export default apiLib;

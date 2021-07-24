@@ -156,7 +156,7 @@ const styles = StyleSheet.create({
    },
    FlatList: {
       flex: 1,
-      marginBottom: 230,
+      marginBottom: 270,
    },
    header: {
       flexDirection: "row",

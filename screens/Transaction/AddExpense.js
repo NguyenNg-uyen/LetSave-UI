@@ -48,11 +48,6 @@ function AddExpense({ navigation, route }) {
    }
    const [fontsLoaded, setFontsLoaded] = useState(false);
    const [cateIcon, setCateIcon] = useState("");
-   // if (CategoryImg == null) {
-   //   setCateIcon(icon_Category);
-   // } else {
-   //   setCateIcon(categoryImg);
-   // }
    //=========== Date Picker  =================
    const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
    const [date, setDate] = useState(moment().format("LL"));
@@ -174,13 +169,6 @@ function AddExpense({ navigation, route }) {
                   >
                      {categoryName !== undefined ? categoryName : ""}
                   </Text>
-                  {/* <Text>{route.params.cateName}</Text> */}
-                  {/* <TextInput
-                style={[styles.text_input, { marginTop: 8, marginLeft: 8 }]}
-                placeholder={route.params.cateName}
-                onChangeText={setCategory}
-                value={category}
-              /> */}
                </View>
             </View>
             {/* ================= 3rd row - Pick Date =================  */}
