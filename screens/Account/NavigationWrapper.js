@@ -22,113 +22,113 @@ import BudgetCategoryChoice from "../Budget/BudgetCategoryChoice";
 import ChangePassword from "../Setting/ChangePassword";
 import ChangePasswordSuccess from "../Setting/ChangePasswordSuccess";
 function NavigationWrapper() {
-   const Stack = createStackNavigator();
-   return (
-      <NavigationContainer>
-         <Stack.Navigator>
-            <Stack.Screen
-               name="Splash"
-               component={Splash}
-               options={{ headerShown: false }}
-            />
-            <Stack.Screen
-               name="Login"
-               component={Login}
-               options={{ headerShown: false }}
-            />
-            <Stack.Screen
-               name="Home"
-               component={Home}
-               options={{ headerShown: false }}
-            />
-            <Stack.Screen
-               name="AddTransaction"
-               component={AddTransaction}
-               options={{ headerShown: true }}
-            />
-            <Stack.Screen
-               name="AddExpense"
-               component={AddExpense}
-               options={{ headerShown: true }}
-            />
-            <Stack.Screen
-               name="CategoryChoice"
-               component={CategoryChoice}
-               options={{ headerShown: true }}
-            />
-            <Stack.Screen
-               name="AddIncome"
-               component={AddIncome}
-               options={{ headerShown: true }}
-            />
-            <Stack.Screen
-               name="CongratsScreen"
-               component={CongratsScreen}
-               options={{ headerShown: false }}
-            />
-            <Stack.Screen
-               name="StatScreen"
-               component={StatScreen}
-               options={{ headerShown: false }}
-            />
-            <Stack.Screen
-               name="ReportDetail"
-               component={ReportDetail}
-               options={{ headerShown: true }}
-            />
-            <Stack.Screen
-               name="CreateBudgetScreen"
-               component={CreateBudgetScreen}
-               options={{ headerShown: true }}
-            />
-            <Stack.Screen
-               name="BudgetSreen"
-               component={BudgetSreen}
-               options={{ headerShown: true }}
-            />
-            <Stack.Screen
-               name="BudgetCategoryChoice"
-               component={BudgetCategoryChoice}
-               options={{ headerShown: true }}
-            />
-            <Stack.Screen
-               name="ProfileScreen"
-               component={ProfileScreen}
-               options={{ headerShown: true }}
-            />
-            <Stack.Screen
-               name="SettingScreen"
-               component={SettingScreen}
-               options={{ headerShown: true }}
-            />
-            <Stack.Screen
-               name="CategoryList"
-               component={CategoryList}
-               options={{ headerShown: true }}
-            />
-            <Stack.Screen
-               name="AddCategory"
-               component={AddCategory}
-               options={{ headerShown: true }}
-            />
-            <Stack.Screen
-               name="UpdateProfile"
-               component={UpdateProfile}
-               options={{ headerShown: true }}
-            />
-            <Stack.Screen
-               name="ChangePassword"
-               component={ChangePassword}
-               options={{ headerShown: true }}
-            />
-            <Stack.Screen
-               name="ChangePasswordSuccess"
-               component={ChangePasswordSuccess}
-               options={{ headerShown: true }}
-            />
-         </Stack.Navigator>
-      </NavigationContainer>
-   );
+  const Stack = createStackNavigator();
+  return (
+    <NavigationContainer>
+      <Stack.Navigator>
+        <Stack.Screen
+          name="Splash"
+          component={Splash}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="Login"
+          component={Login}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="Home"
+          component={Home}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="AddTransaction"
+          component={AddTransaction}
+          options={{ headerShown: true }}
+        />
+        <Stack.Screen
+          name="AddExpense"
+          component={AddExpense}
+          options={{ headerShown: true }}
+        />
+        <Stack.Screen
+          name="CategoryChoice"
+          component={CategoryChoice}
+          options={{ headerShown: true }}
+        />
+        <Stack.Screen
+          name="AddIncome"
+          component={AddIncome}
+          options={{ headerShown: true }}
+        />
+        <Stack.Screen
+          name="CongratsScreen"
+          component={CongratsScreen}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="StatScreen"
+          component={StatScreen}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="ReportDetail"
+          component={ReportDetail}
+          options={{ headerShown: true }}
+        />
+        <Stack.Screen
+          name="CreateBudgetScreen"
+          component={CreateBudgetScreen}
+          options={{ headerShown: true }}
+        />
+        <Stack.Screen
+          name="BudgetSreen"
+          component={BudgetSreen}
+          options={{ headerShown: true }}
+        />
+        <Stack.Screen
+          name="BudgetCategoryChoice"
+          component={BudgetCategoryChoice}
+          options={{ headerShown: true }}
+        />
+        <Stack.Screen
+          name="ProfileScreen"
+          component={ProfileScreen}
+          options={{ headerShown: true }}
+        />
+        <Stack.Screen
+          name="SettingScreen"
+          component={SettingScreen}
+          options={{ headerShown: true }}
+        />
+        <Stack.Screen
+          name="CategoryList"
+          component={CategoryList}
+          options={{ headerShown: true }}
+        />
+        <Stack.Screen
+          name="AddCategory"
+          component={AddCategory}
+          options={{ headerShown: true }}
+        />
+        <Stack.Screen
+          name="UpdateProfile"
+          component={UpdateProfile}
+          options={{ headerShown: true }}
+        />
+        <Stack.Screen
+          name="ChangePassword"
+          component={ChangePassword}
+          options={{ headerShown: true }}
+        />
+        <Stack.Screen
+          name="ChangePasswordSuccess"
+          component={ChangePasswordSuccess}
+          options={{ headerShown: false }}
+        />
+      </Stack.Navigator>
+    </NavigationContainer>
+  );
 }
 
 export default NavigationWrapper;
