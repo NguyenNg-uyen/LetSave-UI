@@ -148,7 +148,7 @@ const ProfileScreen = ({ navigation }) => {
                         paddingTop: 5,
                      }}
                   >
-                     ${balance}
+                     ${balance.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
                   </Text>
                   <View style={[styles.horizontalline]}></View>
                </View>

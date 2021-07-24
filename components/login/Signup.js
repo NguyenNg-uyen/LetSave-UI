@@ -51,8 +51,7 @@ export default function Signin() {
          /*--------------------- Validation function ---------------------*/
       }
       const validate = () => {
-         const emailRegex =
-            /^[\w-]+(\.[\w-]+)*@([a-z0-9-]+(\.[a-z0-9-]+)*?\.[a-z]{2,6}|(\d{1,3}\.){3}\d{1,3})(:\d{4})?$/;
+         const emailRegex = /^[A-Z][a-zA-Z]{3,}(?: [A-Z][a-zA-Z]*){0,2}$/;
          if (!emailRegex.test(mail)) {
             Alert.alert("Email is not valid");
             setMail("");

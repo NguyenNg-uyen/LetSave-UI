@@ -19,6 +19,8 @@ import UpdateProfile from "../Setting/UpdateProfile";
 import CreateBudgetScreen from "../Budget/CreateBudgetScreen";
 import BudgetSreen from "../Budget/BugetScreen";
 import BudgetCategoryChoice from "../Budget/BudgetCategoryChoice";
+import ChangePassword from "../Setting/ChangePassword";
+import ChangePasswordSuccess from "../Setting/ChangePasswordSuccess";
 function NavigationWrapper() {
    const Stack = createStackNavigator();
    return (
@@ -112,6 +114,16 @@ function NavigationWrapper() {
             <Stack.Screen
                name="UpdateProfile"
                component={UpdateProfile}
+               options={{ headerShown: true }}
+            />
+            <Stack.Screen
+               name="ChangePassword"
+               component={ChangePassword}
+               options={{ headerShown: true }}
+            />
+            <Stack.Screen
+               name="ChangePasswordSuccess"
+               component={ChangePasswordSuccess}
                options={{ headerShown: true }}
             />
          </Stack.Navigator>

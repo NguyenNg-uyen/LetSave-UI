@@ -19,6 +19,7 @@ import icon_cate from "../.././assets/images/icon_cate.png";
 import icon_noti from "../.././assets/images/icon_noti.png";
 import icon_aboutApp from "../.././assets/images/icon_aboutApp.png";
 import icon_logOut from "../.././assets/images/icon_logOut.png";
+import icon_pass from "../.././assets/images/icon_pass.png";
 import {
    GREEN,
    MEDIUM_PINK,
@@ -134,6 +135,23 @@ function SettingScreen({ navigation }) {
                </View>
             </TouchableOpacity>
             {/* Horizontal line */}
+            <View style={styles.horizontalline}></View>
+            {/* =========================== CHANGE PASS ===================================== */}
+            <TouchableOpacity
+               onPress={() => {
+                  navigation.navigate("ChangePassword");
+               }}
+            >
+               <View style={{ flexDirection: "row" }}>
+                  <Image source={icon_pass} style={styles.icon_style} />
+                  <View style={{ flexDirection: "column" }}>
+                     <Text style={styles.titleStyle}>Change Password</Text>
+                     <Text style={styles.textStyle}>
+                        Change account password
+                     </Text>
+                  </View>
+               </View>
+            </TouchableOpacity>
             <View style={styles.horizontalline}></View>
             {/* =========================== LOG OUT ===================================== */}
             <TouchableOpacity
